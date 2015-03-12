@@ -2,6 +2,7 @@
 
 class Feline : public TGraph
 {
+
 public:
 	void coorCreate();
 	void topologicalOrdering();
