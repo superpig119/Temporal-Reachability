@@ -58,14 +58,15 @@ void Feline::yCoor()
 			roots[vnode[(*imd).first].ni.x] = vnode[(*imd).first].ni.sNum;
 	}
 
-	int y = vnode.size();
+//	int y = vnode.size();
+	int y = 0;
 	while(roots.size())
 	{
 		int u = (*(roots.rbegin())).second;
 		iroots = roots.rbegin();
 		roots.erase((*iroots).first);
 		vnode[u].ni.y = y;
-		y--;
+		y++;
 		for(ilEdge = vnode[u].lEdge.begin(); ilEdge != vnode[u].lEdge.end(); ilEdge++)
 		{
 			md[vnode[(*ilEdge).dsNum].ni.sNum]--;
