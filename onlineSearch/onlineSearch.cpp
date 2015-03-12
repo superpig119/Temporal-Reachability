@@ -10,6 +10,11 @@ int main()
 	infile >> fileName;
 	F.buildGraph(fileName.c_str());
 	F.coorCreate();
+	if(F.Reachable(0, 5))
+		cout << "Reachable!" << endl;
+	else
+		cout << "Not Reachable!" << endl;
+
 	//TG.findSCC();
 	return 0;	
 }
