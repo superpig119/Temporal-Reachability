@@ -7,6 +7,30 @@ void Feline::coorCreate()
 	testNode();
 }
 
+bool Feline::Reachable(int s1, int s2)
+{
+	if(s1 == s2)
+		return true;
+	if(isNE(s1, s2))
+	{
+		list<edgeInfo>::iterator ilEdge;
+		for(ilEdge = vnode[s1].lEdge.begin(); ilEdge != vnode[s1].lEdge.end(); ilEdge++)
+		{
+			if(Reachable((*ilEdge).dsNum, s2))
+				return true;
+		}
+	}
+	return false;
+}
+
+bool Feline::isNE(int s1, int s2)
+{
+	if(vnode[s1].ni.x <= vnode[s2].ni.x && vnode[s1].ni.y <= vnode[s2].ni.y)
+		return true;
+	else
+		return false;
+}
+
 void Feline::yCoor()
 {
 	vector<node>::iterator ivnode;
