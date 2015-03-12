@@ -3,17 +3,67 @@
 void Feline::coorCreate()
 {
 	topologicalOrdering();
+	yCoor();
+	testNode();
 }
-	
+
+void Feline::yCoor()
+{
+	vector<node>::iterator ivnode;
+	list<edgeInfo>::iterator ilEdge;
+	int i;
+	for(i = 0; i < vnode.size(); i++)
+	{
+		md[i] = 0;
+	}
+
+	for(ivnode = vnode.begin(); ivnode != vnode.end(); ivnode++)
+	{
+		for(ilEdge = (*ivnode).lEdge.begin(); ilEdge != (*ivnode).lEdge.end(); ilEdge++)
+		{
+			md[vnode[(*ilEdge).dsNum].ni.sNum]++;
+		}
+	}
+
+	map<int, int> roots;	//<x, sNum>
+	map<int, int>::reverse_iterator iroots;	
+	map<int, int>::iterator imd;
+	for(imd = md.begin(); imd != md.end(); imd++)
+	{
+		if((*imd).second == 0)
+			roots[vnode[(*imd).first].ni.x] = vnode[(*imd).first].ni.sNum;
+	}
+
+	int y = vnode.size();
+	while(roots.size())
+	{
+		int u = (*(roots.rbegin())).second;
+		iroots = roots.rbegin();
+		roots.erase((*iroots).first);
+		vnode[u].ni.y = y;
+		y--;
+		for(ilEdge = vnode[u].lEdge.begin(); ilEdge != vnode[u].lEdge.end(); ilEdge++)
+		{
+			md[vnode[(*ilEdge).dsNum].ni.sNum]--;
+			if(md[vnode[(*ilEdge).dsNum].ni.sNum] == 0)
+			{
+				roots[vnode[(*ilEdge).dsNum].ni.x] = vnode[(*ilEdge).dsNum].ni.sNum;
+			}
+		}
+	}
+}
+
 void Feline::topologicalOrdering()
 {
 	int cnt = 0;
 	int i;
 	vector<int> TopoSort(vnode.size(), 0);
 	DFSTravel(cnt, TopoSort);
-	for(i = cnt - 1; i >=0; i--)
+	for(i = cnt - 1; i >= 0; i--)
 	{
-		cout << vnode[TopoSort[i]].ni.ID << "\t" << vnode[TopoSort[i]].ni.temporalID   << endl ;
+//		cout << i << "\t" << vnode[TopoSort[i]].ni.ID << "\t" << vnode[TopoSort[i]].ni.temporalID   << endl ;
+		vnode[TopoSort[i]].ni.x = cnt - i;
+//		cout << cnt - i << endl;
 	}
 	cout << endl;
 }
@@ -43,13 +93,23 @@ void Feline::DFS(int sNum, vector<bool> &visited, int &time, vector<int> &vd, ve
 	node n = vnode[sNum];
 	for(ilEdge = n.lEdge.begin(); ilEdge != n.lEdge.end(); ilEdge++)
 	{
-		if(!visited[(*ilEdge).dNode.sNum])
+		if(!visited[vnode[(*ilEdge).dsNum].ni.sNum])
 		{
-			vParent[(*ilEdge).dNode.sNum] = sNum;
-			DFS((*ilEdge).dNode.sNum, visited, time, vd, vf, vParent, cnt, TopoSort);
+			vParent[vnode[(*ilEdge).dsNum].ni.sNum] = sNum;
+			DFS(vnode[(*ilEdge).dsNum].ni.sNum, visited, time, vd, vf, vParent, cnt, TopoSort);
 		}
 	}
 	time++;
 	vf[sNum] = time;
 	TopoSort[cnt++] = sNum;
+}
+
+void Feline::testNode()
+{
+	cout << "ID\ttemporalID\tsNUm\ttype\tx\ty" << endl;
+	vector<node>::iterator ivnode;
+	for(ivnode = vnode.begin(); ivnode != vnode.end(); ivnode++)
+	{
+		cout << "ID:\t" << (*ivnode).ni.ID << "\t" << (*ivnode).ni.temporalID << "\t" << (*ivnode).ni.sNum << "\t" << (*ivnode).ni.nodeType << "\t" << (*ivnode).ni.x << "\t" << (*ivnode).ni.y << endl;
+	}
 }

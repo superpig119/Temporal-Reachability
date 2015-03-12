@@ -35,7 +35,7 @@ void TGraph::countInOut(const char* fileName)
 		}
 	}
 	infile.close();
-//	testCountInOut(mmInTime, mmOutTime);
+//	testCountInOut();
 }
 	
 void TGraph::createNodes()
@@ -61,7 +61,7 @@ void TGraph::createNodes()
 			if(im != mmInTime[i].begin())	//create edge type 1
 			{
 				edgeInfo ei;
-				ei.dNode = n.ni;
+				ei.dsNum = n.ni.sNum;
 				ei.edgeType = 1;
 				vnode[sNum - 2].lEdge.push_back(ei);
 			}
@@ -80,7 +80,7 @@ void TGraph::createNodes()
 			if(im != mmOutTime[i].begin())
 			{
 				edgeInfo ei;
-				ei.dNode = n.ni;
+				ei.dsNum = n.ni.sNum;
 				ei.edgeType = 1;
 				vnode[sNum - 2].lEdge.push_back(ei);
 			}
@@ -92,7 +92,7 @@ void TGraph::createNodes()
 			if((*ivntmp1).ni.nodeType == 0 && (*ivntmp2).ni.nodeType == 1)
 			{
 				edgeInfo ei;
-				ei.dNode = (*ivntmp2).ni;
+				ei.dsNum = (*ivntmp2).ni.sNum;
 				ei.edgeType = 2;
 				vnode[(*ivntmp1).ni.sNum].lEdge.push_back(ei);
 			}
@@ -124,7 +124,7 @@ void TGraph::addEdges(const char* fileName)
 			ns = vnode[mmOutSnum[sNode][ts]];
 			nd = vnode[mmInSnum[dNode][te]];
 			edgeInfo ei;
-			ei.dNode = nd.ni;
+			ei.dsNum = nd.ni.sNum;
 			ei.sTime = ts;
 			ei.eTime = te;
 			ei.edgeType = 0;
@@ -132,7 +132,7 @@ void TGraph::addEdges(const char* fileName)
 		}
 	}
 	infile.close();
-	testNodes();
+//	testNodes();
 }
 
 void TGraph::tarjan(int i, vector<int> &vDFN, int &dIndex, int &Stop, vector<int> &vLOW, vector<bool> &vInstack, stack<node> &sNode, int &Bcnt, vector<int> &vBelong)//Tarjan 
@@ -147,7 +147,7 @@ void TGraph::tarjan(int i, vector<int> &vDFN, int &dIndex, int &Stop, vector<int
     for(ilEdge = vnode[i].lEdge.begin(); ilEdge != vnode[i].lEdge.end(); ilEdge++)
 	{
 		//j=e->t;//临时变量 
-        j = (*ilEdge).dNode.sNum;
+        j = vnode[(*ilEdge).dsNum].ni.sNum;
 		if (!vDFN[j])//j没有被搜索过 
 		{
 			tarjan(j, vDFN, dIndex, Stop, vLOW, vInstack, sNode, Bcnt, vBelong);//递归搜索j 
@@ -209,6 +209,29 @@ void TGraph::testSCC()
 void TGraph::testCountInOut()
 {
 	map<int, bool>::iterator im;
+	int i;
+	cout << "In Time:" << endl;
+	for(i = 0; i < mmInTime.size(); i++)
+	{
+		cout << i;
+		for(im = mmInTime[i].begin(); im != mmInTime[i].end(); im++)
+		{
+			cout << "\t" << (*im).first;
+		}
+		cout << endl;
+	}
+	
+	cout << "Out Time:" << endl;
+	for(i = 0; i < mmOutTime.size(); i++)
+	{
+		cout << i;
+		for(im = mmOutTime[i].begin(); im != mmOutTime[i].end(); im++)
+		{
+			cout << "\t" << (*im).first;
+		}
+		cout << endl;
+	}
+	/*
 	cout << "0 in time" << endl;
 	for(im = mmInTime[0].begin(); im != mmInTime[0].end(); im++)
 	{
@@ -220,7 +243,7 @@ void TGraph::testCountInOut()
 	{
 		cout << (*im).first << "\t";
 	}
-	cout << endl;
+	cout << endl;*/
 }
 	
 void TGraph::testNodes()
@@ -234,7 +257,7 @@ void TGraph::testNodes()
 		cout << "edges:";
 		for(ilEdge = (*ivnode).lEdge.begin(); ilEdge != (*ivnode).lEdge.end(); ilEdge++)
 		{
-			cout << "\t" << (*ilEdge).dNode.temporalID << "\t" << (*ilEdge).edgeType;
+			cout << "\t" << vnode[(*ilEdge).dsNum].ni.temporalID << "\t" << (*ilEdge).edgeType;
 		}
 		cout << endl;
 	}

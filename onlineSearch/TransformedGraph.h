@@ -21,7 +21,7 @@ typedef struct NODEINFO
 
 typedef struct EDGEINFO
 {
-	nodeInfo dNode;	//destination node
+	int dsNum;	//destination node
 	int sTime, eTime;
 	int edgeType;	//0: edge from the original graph
 					//1: edge within each node
@@ -44,7 +44,7 @@ public:
 
     void findSCC();
     void tarjan(int i, vector<int> &vDFN, int &dIndex, int &stop, vector<int> &vLOW, vector<bool> &vInstack, stack<node> &sNode, int &Bcnt, vector<int> &vBelong);
-	
+
 	//	bool nodeTimeCompare(node n1, node n2);
 	void testCountInOut();
 	void testNodes();

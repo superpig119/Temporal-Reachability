@@ -4,8 +4,10 @@ int main()
 {
 /*	TGraph TG;
 	TG.buildGraph(fileName.c_str());*/
+	ifstream infile("filename");
 	Feline F;
-	string fileName = "../data/data3";
+	string fileName;
+	infile >> fileName;
 	F.buildGraph(fileName.c_str());
 	F.coorCreate();
 	//TG.findSCC();
