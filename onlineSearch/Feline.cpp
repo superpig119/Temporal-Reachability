@@ -59,7 +59,7 @@ void Feline::yCoor()
 	}
 
 //	int y = vnode.size();
-	int y = 0;
+	int y = 1;
 	while(roots.size())
 	{
 		int u = (*(roots.rbegin())).second;
