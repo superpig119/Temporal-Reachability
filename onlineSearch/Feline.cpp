@@ -138,3 +138,7 @@ void Feline::testNode()
 		cout << "ID:\t" << (*ivnode).ni.ID << "\t" << (*ivnode).ni.temporalID << "\t" << (*ivnode).ni.sNum << "\t" << (*ivnode).ni.nodeType << "\t" << (*ivnode).ni.x << "\t" << (*ivnode).ni.y << endl;
 	}
 }
+
+void Feline::showEdges()
+{
+}

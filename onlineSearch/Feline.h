@@ -12,6 +12,7 @@ public:
 	bool isNE(int s1, int s2);
 
 	void testNode();
+    void showEdges();
 
 	map<int, int> md;	//in-neighbor number
 //	map<int, set<int> > mheads;//out-neighbors

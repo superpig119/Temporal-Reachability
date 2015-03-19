@@ -14,6 +14,3 @@ for line in lines:
 #    plt.legend()
 plt.show()  
 
-#plt.plot([10, 20, 30])  
-#plt.xlabel('tiems')  
-#plt.ylabel('numbers')  
