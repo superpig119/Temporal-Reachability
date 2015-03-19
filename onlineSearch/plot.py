@@ -11,7 +11,7 @@ for line in lines:
     s = line.split();
     l = s[1] + " " + s[2]
     plt.plot(int(s[5]), int(s[6]), 'o', label = l)
-    plt.legend()
+#    plt.legend()
 plt.show()  
 
 #plt.plot([10, 20, 30])  

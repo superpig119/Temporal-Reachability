@@ -2,10 +2,10 @@
 
 import random
 
-data = open('data', 'w')
+data = open('data10', 'w')
 
-nnode=1000
-tperiod=10000
+nnode=10
+tperiod=20
 r=random
 
 data.write(str(nnode) + '\n')
@@ -13,7 +13,7 @@ data.write(str(nnode) + '\n')
 list = range(nnode)
 for id in range(nnode):
 	line = str(id)
-	enum = r.randint(10,70)
+	enum = r.randint(1, 5)
 	slice = r.sample(list, enum)
 	slice.sort()
 	line += '\t' + str(enum)
