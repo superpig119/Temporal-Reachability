@@ -13,6 +13,8 @@ public:
 
 	void testNode();
     void showEdges();
+	void outputEdges();
+	void outputNodes();
 
 	map<int, int> md;	//in-neighbor number
 //	map<int, set<int> > mheads;//out-neighbors

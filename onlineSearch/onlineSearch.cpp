@@ -10,6 +10,8 @@ int main()
 	infile >> fileName;
 	F.buildGraph(fileName.c_str());
 	F.coorCreate();
+	F.outputNodes();
+	F.outputEdges();
 	if(F.Reachable(0, 5))
 		cout << "Reachable!" << endl;
 	else

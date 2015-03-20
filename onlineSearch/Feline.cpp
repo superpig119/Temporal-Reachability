@@ -141,4 +141,39 @@ void Feline::testNode()
 
 void Feline::showEdges()
 {
+	vector<node>::iterator ivnode;
+	list<edgeInfo>::iterator ilEdge;
+	for(ivnode = vnode.begin(); ivnode != vnode.end(); ivnode++)
+	{
+		for(ilEdge = (*ivnode).lEdge.begin(); ilEdge != (*ivnode).lEdge.end(); ilEdge++)
+		{
+			cout << (*ivnode).ni.sNum << "\t" << (*ilEdge).dsNum << "\t" << (*ilEdge).edgeType << endl;
+		}
+	}
+}
+
+void Feline::outputNodes()
+{
+	ofstream ofile("coordinate");
+	vector<node>::iterator ivnode;
+	for(ivnode = vnode.begin(); ivnode != vnode.end(); ivnode++)
+	{
+		ofile << "ID:\t" << (*ivnode).ni.ID << "\t" << (*ivnode).ni.temporalID << "\t" << (*ivnode).ni.sNum << "\t" << (*ivnode).ni.nodeType << "\t" << (*ivnode).ni.x << "\t" << (*ivnode).ni.y << endl;
+	}
+	ofile.close();
+}
+
+void Feline::outputEdges()
+{
+	ofstream ofile("edges");
+	vector<node>::iterator ivnode;
+	list<edgeInfo>::iterator ilEdge;
+	for(ivnode = vnode.begin(); ivnode != vnode.end(); ivnode++)
+	{
+		for(ilEdge = (*ivnode).lEdge.begin(); ilEdge != (*ivnode).lEdge.end(); ilEdge++)
+		{
+			ofile << (*ivnode).ni.sNum << "\t" << (*ilEdge).dsNum << "\t" << (*ilEdge).edgeType << endl;
+		}
+	}
+	ofile.close();
 }
