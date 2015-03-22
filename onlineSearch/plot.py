@@ -2,6 +2,7 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 
 coordinate = open("coordinate")
 edgefile = open("edges")
@@ -13,13 +14,13 @@ ax1 = plt.subplot(111)
 for line in nodes:
     s = line.split()
     l = s[1] + " " + s[2]
-	nodeinfo[int(s[3])] = [int(s[1]), int(s[2])]
-	plt.plot(int(s[5]), int(s[6]), 'o', label = l)
+    nodeinfo[int(s[3])] = [int(s[1]), int(s[2])]
+    plt.plot(int(s[5]), int(s[6]), 'o', label = l)
 #    plt.legend()
 
 for edge in edges:
 	s = line.split()
-	plt.lines.line2D(nodeinfo[s[0]][0], nodeinfo[s[0]][0])
+	plt.plot(lines.line2D(nodeinfo[s[0]][0], nodeinfo[s[0]][0]))
 
 plt.show()  
 
