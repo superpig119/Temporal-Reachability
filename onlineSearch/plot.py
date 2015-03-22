@@ -3,6 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
+from matplotlib.lines import Line2D 
 
 coordinate = open("coordinate")
 edgefile = open("edges")
@@ -17,10 +18,14 @@ for line in nodes:
     nodeinfo[int(s[3])] = [int(s[1]), int(s[2])]
     plt.plot(int(s[5]), int(s[6]), 'o', label = l)
 #    plt.legend()
+print nodeinfo
 
 for edge in edges:
-	s = line.split()
-	plt.plot(lines.line2D(nodeinfo[s[0]][0], nodeinfo[s[0]][0]))
+	s = edge.split()
+	print edge
+	print nodeinfo[int(s[1])], nodeinfo[int(s[2])]
+	l = Line2D(nodeinfo[int(s[0])], nodeinfo[int(s[1])])
+	plt.gca().add_line(l)
 
 plt.show()  
 
