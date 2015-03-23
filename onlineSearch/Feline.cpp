@@ -129,6 +129,17 @@ void Feline::DFS(int sNum, vector<bool> &visited, int &time, vector<int> &vd, ve
 	TopoSort[cnt++] = sNum;
 }
 
+void Feline::findSkyline()
+{
+	vector<bool> vDomed(vNode.size(), false);
+	vector<bool> vVisited(vNode.size(), true);
+	int i = vNode.size();
+	while(i)
+	{
+		
+	}
+}
+
 void Feline::testNode()
 {
 	cout << "ID\ttemporalID\tsNUm\ttype\tx\ty" << endl;
