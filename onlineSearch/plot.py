@@ -21,7 +21,7 @@ for line in nodes:
     else:
         plt.plot(int(s[5]), int(s[6]), 'o', label = l)
 #    plt.legend()
-print nodeinfo
+#print nodeinfo
 
 for edge in edges:
     s = edge.split()
