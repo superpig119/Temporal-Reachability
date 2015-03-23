@@ -25,8 +25,8 @@ print nodeinfo
 
 for edge in edges:
     s = edge.split()
-    print edge
-    print s[0], nodeinfo[int(s[0])], s[1], nodeinfo[int(s[1])]
+#    print edge
+#    print s[0], nodeinfo[int(s[0])], s[1], nodeinfo[int(s[1])]
 #    plt.plot([1,3],[6,4])
 #l = Line2D(nodeinfo[int(s[0])], nodeinfo[int(s[1])])
     if int(s[2])==0:
