@@ -12,7 +12,7 @@ int main()
 	F.coorCreate();
 	F.outputNodes();
 	F.outputEdges();
-	if(F.Reachable(0, 5))
+	if(F.Reachable(0, 100))
 		cout << "Reachable!" << endl;
 	else
 		cout << "Not Reachable!" << endl;

@@ -131,13 +131,17 @@ void Feline::DFS(int sNum, vector<bool> &visited, int &time, vector<int> &vd, ve
 
 void Feline::findSkyline()
 {
-	vector<bool> vDomed(vNode.size(), false);
-	vector<bool> vVisited(vNode.size(), true);
-	int i = vNode.size();
+	vector<bool> vDomed(vnode.size(), false);
+	vector<bool> vVisited(vnode.size(), true);
+	int i = vnode.size();
 	while(i)
 	{
 		
 	}
+}
+
+void Feline::findFP()
+{
 }
 
 void Feline::testNode()
