@@ -99,16 +99,17 @@ void SimpleGraph::condense()
 			}
 			vNode.push_back(ni);
 		}
+        
 		for(imsSCC = msSCC.begin(); imsSCC != msSCC.end(); imsSCC++)
 		{
 			for(is = (*imsSCC).second.begin(); is != (*imsSCC).second.end(); is++)        
-			{
+			{   
 				for(imEdge = vnode[(*is)].mEdge.begin(); imEdge != vnode[(*is)].mEdge.end(); imEdge++)
 				{
 					int n2 = mOtoN[(*imEdge).first];
-					if(vNode[(*imsSCC).first].mEdge.find(n2) != vNode[(*imsSCC).first].mEdge.end())
+					if(vNode[(*imsSCC).first-1].mEdge.find(n2) == vNode[(*imsSCC).first-1].mEdge.end())
 					{
-						vNode[(*imsSCC).first].mEdge[n2] = 1;
+						vNode[(*imsSCC).first-1].mEdge.insert(make_pair(n2, 1));
 					}
 				}
 			}
@@ -140,7 +141,7 @@ void SimpleGraph::testGraph()
 	map<int, int>::iterator imEdge;
 	for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
 	{
-		cout << (*ivnode).ID << endl;
+		cout << "node:" << (*ivnode).ID << endl << "edges:\t";
 		for(imEdge = (*ivnode).mEdge.begin(); imEdge != (*ivnode).mEdge.end(); imEdge++)
 		{
 			cout << (*imEdge).first << "\t";
