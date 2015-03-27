@@ -8,8 +8,10 @@ int main()
 
 	SimpleGraph sg;
 	sg.buildGraph(filename.c_str());
-	sg.findSCC();
+	sg.hasSCC = sg.findSCC();
 	sg.testSCC();
+	sg.condense();
+	sg.testGraph();
 
 	return 0;
 }

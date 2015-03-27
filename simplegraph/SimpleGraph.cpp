@@ -17,13 +17,13 @@ void SimpleGraph::buildGraph(const char* fileName)
 		for(j = 0; j < edgeNum; j++)
 		{
 			infile >> dNode;
-			ni.lEdge.push_back(dNode);
+			ni.mEdge[dNode] = 1;
 		}
 		vnode.push_back(ni);
 	}
 }
 
-void SimpleGraph::findSCC()
+bool SimpleGraph::findSCC()
 {
 	int i, Stop, Bcnt, dIndex;
 	Stop = Bcnt=dIndex=0;
@@ -40,44 +40,83 @@ void SimpleGraph::findSCC()
     {
         msSCC[vBelong[i]].insert(i);
     }
+	if(msSCC.size() == 1)
+		return false;
+	return true;
 //    testSCC();
 }
 
-void SimpleGraph::tarjan(int i, vector<int> &vDFN, int &dIndex, int &Stop, vector<int> &vLOW, vector<bool> &vInstack, stack<nodeInfo> &sNode, int &Bcnt, vector<int> &vBelong)//Tarjan 
+void SimpleGraph::tarjan(int i, vector<int> &vDFN, int &dIndex, int &Stop, vector<int> &vLOW, vector<bool> &vInstack, stack<nodeInfo> &sNode, int &Bcnt, vector<int> &vBelong) 
 {
 	int j;
-	vDFN[i]=vLOW[i]=++dIndex;//Index 时间戳 
-	vInstack[i]=true;//标记入栈 
+	vDFN[i]=vLOW[i]=++dIndex; 
+	vInstack[i]=true; 
     sNode.push(vnode[i]);
-	//Stap[++Stop]=i;//入栈 
-//	for (edge *e=V[i];e;e=e->next)//枚举所有相连边 
-	list<int>::iterator ilEdge;
-    for(ilEdge = vnode[i].lEdge.begin(); ilEdge != vnode[i].lEdge.end(); ilEdge++)
+	map<int, int>::iterator imEdge;
+    for(imEdge = vnode[i].mEdge.begin(); imEdge != vnode[i].mEdge.end(); imEdge++)
 	{
-		//j=e->t;//临时变量 
-        j = vnode[(*ilEdge)].ID;
-		if (!vDFN[j])//j没有被搜索过 
+        j = vnode[(*imEdge).first].ID;
+		if (!vDFN[j])
 		{
-			tarjan(j, vDFN, dIndex, Stop, vLOW, vInstack, sNode, Bcnt, vBelong);//递归搜索j 
-			if (vLOW[j] < vLOW[i])//回溯中发现j找到了更老的时间戳 
-				vLOW[i]= vLOW[j];//更新能达到老时间戳 
+			tarjan(j, vDFN, dIndex, Stop, vLOW, vInstack, sNode, Bcnt, vBelong); 
+			if (vLOW[j] < vLOW[i])
+				vLOW[i]= vLOW[j];
 		}
-		else if (vInstack[j] && vDFN[j] < vLOW[i])//如果已经印有时间戳 且 时间戳比较小,则有环 
-			vLOW[i] = vDFN[j];//当前记录可追溯时间戳更新 
+		else if (vInstack[j] && vDFN[j] < vLOW[i])
+			vLOW[i] = vDFN[j];
 	}
-	if (vDFN[i] == vLOW[i])//可追溯最老是自己,表明自己是当前强连通分量的栈底 
+	if (vDFN[i] == vLOW[i]) 
 	{
-		Bcnt++;//强连通分量数增加 
+		Bcnt++;
 		do
 		{
-		//	j=Stap[Stop--];//出栈顶元素 
             nodeInfo n = sNode.top();
             sNode.pop();
             j = n.ID;
-			vInstack[j]=false;//标记出栈 
-			vBelong[j]=Bcnt;//记录j所在的强连通分量编号 
+			vInstack[j]=false; 
+			vBelong[j]=Bcnt;
 		}
-		while (j != i);//如果是当前元素,弹栈完成 
+		while (j != i);
+	}
+}
+
+void SimpleGraph::condense()
+{
+	if(hasSCC)
+	{
+		vector<nodeInfo>::iterator ivnode;
+		map<int, int>::iterator imEdge;
+		map<int, set<int> >::iterator imsSCC;
+		set<int>::iterator is;
+		int n = 0;
+		for(imsSCC = msSCC.begin(); imsSCC != msSCC.end(); imsSCC++, n++)
+		{
+			nodeInfo ni;
+			ni.ID = n;
+			for(is = (*imsSCC).second.begin(); is != (*imsSCC).second.end(); is++)        
+			{
+				mOtoN[*is] = (*imsSCC).first;
+			}
+			vNode.push_back(ni);
+		}
+		for(imsSCC = msSCC.begin(); imsSCC != msSCC.end(); imsSCC++)
+		{
+			for(is = (*imsSCC).second.begin(); is != (*imsSCC).second.end(); is++)        
+			{
+				for(imEdge = vnode[(*is)].mEdge.begin(); imEdge != vnode[(*is)].mEdge.end(); imEdge++)
+				{
+					int n2 = mOtoN[(*imEdge).first];
+					if(vNode[(*imsSCC).first].mEdge.find(n2) != vNode[(*imsSCC).first].mEdge.end())
+					{
+						vNode[(*imsSCC).first].mEdge[n2] = 1;
+					}
+				}
+			}
+		}
+	}
+	else
+	{
+		vNode = vnode;
 	}
 }
 
@@ -91,5 +130,21 @@ void SimpleGraph::testSCC()
         for(is = (*imsSCC).second.begin(); is != (*imsSCC).second.end(); is++)        
             cout << *is << "\t";
         cout << endl;
+	}
+}
+
+void SimpleGraph::testGraph()
+{
+	cout << vNode.size() << endl;
+	vector<nodeInfo>::iterator ivnode;
+	map<int, int>::iterator imEdge;
+	for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
+	{
+		cout << (*ivnode).ID << endl;
+		for(imEdge = (*ivnode).mEdge.begin(); imEdge != (*ivnode).mEdge.end(); imEdge++)
+		{
+			cout << (*imEdge).first << "\t";
+		}
+		cout << endl;
 	}
 }
