@@ -7,11 +7,13 @@ int main()
 	infile >> filename;
 
 	SimpleGraph sg;
-	sg.buildGraph(filename.c_str());
-	sg.hasSCC = sg.findSCC();
-	sg.testSCC();
-	sg.condense();
-	sg.testGraph();
+	if(sg.buildGraph(filename.c_str()) != -1)
+    {
+	    sg.hasSCC = sg.findSCC();
+	    sg.testSCC();
+	    sg.condense();
+	    sg.testGraph();
+    }
 
 	return 0;
 }

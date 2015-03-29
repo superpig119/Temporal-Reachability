@@ -2,9 +2,9 @@
 
 import random
 
-data = open('data20', 'w')
+data = open('data10000', 'w')
 
-nnode=20
+nnode=9000
 r=random
 
 data.write(str(nnode) + '\n')
@@ -12,7 +12,7 @@ data.write(str(nnode) + '\n')
 list = range(nnode)
 for id in range(nnode):
 	line = str(id)
-	enum = r.randint(4, 10)
+	enum = r.randint(2, 10)
 	line += '\t' + str(enum)
 	slice = r.sample(list, enum)
 	slice.sort()
