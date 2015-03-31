@@ -43,13 +43,15 @@ bool SimpleGraph::findSCC()
 	for (i = 0;i < vnode.size(); i++)
 		if (!vDFN[i])
 			tarjan(i, vDFN, dIndex, Stop, vLOW, vInstack, sNode, Bcnt, vBelong);
-    cout << "!!!!" << endl;
     for(i = 0; i< vnode.size(); i++)
     {
         msSCC[vBelong[i]].insert(i);
     }
+		cout << "msSCC size:" << msSCC.size() << endl;
 	if(msSCC.size() == vnode.size())
+	{
 		return false;
+	}
 	return true;
 //    testSCC();
 }
@@ -86,7 +88,6 @@ void SimpleGraph::tarjan(int i, vector<int> &vDFN, int &dIndex, int &Stop, vecto
 		}
 		while (j != i);
 	}
-    cout << ">>>" << endl;
 }
 
 void SimpleGraph::condense()
@@ -116,7 +117,7 @@ void SimpleGraph::condense()
 				for(imEdge = vnode[(*is)].mEdge.begin(); imEdge != vnode[(*is)].mEdge.end(); imEdge++)
 				{
 					int n2 = mOtoN[(*imEdge).first];
-					if(vNode[(*imsSCC).first-1].mEdge.find(n2) == vNode[(*imsSCC).first-1].mEdge.end() && n2 != (*imsSCC).first - 1)
+					if(vNode[(*imsSCC).first-1].mEdge.find(n2) == vNode[(*imsSCC).first-1].mEdge.end() && n2 != (*imsSCC).first)
 					{
 						vNode[(*imsSCC).first-1].mEdge.insert(make_pair(n2 - 1, 1));
 					}
@@ -136,14 +137,14 @@ void SimpleGraph::testSCC()
     set<int>::iterator is;
     for(imsSCC = msSCC.begin(); imsSCC != msSCC.end(); imsSCC++)
     {
-        cout << "SCC " << (*imsSCC).first << ": ";
+        cout << "SCC " << (*imsSCC).first - 1<< ": ";
         for(is = (*imsSCC).second.begin(); is != (*imsSCC).second.end(); is++)        
             cout << *is << "\t";
         cout << endl;
 	}
 }
 
-void SimpleGraph::testGraph()
+void SimpleGraph::testGraph(vector<nodeInfo> &vNode)
 {
 	cout << vNode.size() << endl;
 	vector<nodeInfo>::iterator ivnode;

@@ -1,4 +1,4 @@
-#include "SimpleGraph.h"
+#include "Feline.h"
 
 int main()
 {
@@ -6,14 +6,21 @@ int main()
 	string filename;
 	infile >> filename;
 
-	SimpleGraph sg;
-	if(sg.buildGraph(filename.c_str()) != -1)
+	Feline f;
+	if(f.buildGraph(filename.c_str()) != -1)
     {
-	    sg.hasSCC = sg.findSCC();
-	    sg.testSCC();
-	    sg.condense();
-	    sg.testGraph();
+	    f.hasSCC = f.findSCC();
+	//	sg.testGraph(sg.vnode);
+//	    f.testSCC();
+	    f.condense();
+/*		if(f.hasSCC)
+		    f.testGraph(f.vNode);
+		else
+			f.testGraph(f.vnode);*/
     }
-
+	f.coorCreate();
+	f.outputNodes();
+	f.outputEdges();
+	f.findFP();
 	return 0;
 }

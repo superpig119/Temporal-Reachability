@@ -1,0 +1,10 @@
+#!/usr/bin/python
+
+import networkx as nx
+
+#G=nx.star_graph(30)
+#nx.write_adjlist(G, "./star")
+
+G=nx.watts_strogatz_graph(10000,20, 40)
+nx.write_adjlist(G, "wssmall")
+
