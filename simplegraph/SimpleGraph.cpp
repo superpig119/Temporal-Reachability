@@ -131,6 +131,69 @@ void SimpleGraph::condense()
 	}
 }
 
+void SimpleGraph::reachBFS()
+{
+    int i;
+    int n = vNode.size();
+    map<int, bool> mVisited;
+    vector<vector<int> > vvNeighbor;
+    vector<int>::iterator iv;
+    int count = 0;
+    for(i = 0; i < n; i++)
+    {
+        mVisited[i] = false;
+        vector<int> neighbor;
+        vvNeighbor.push_back(neighbor);
+    }
+    for(i = 0; i < n; i++)
+    {
+        if(!mVisited[i])
+            BFS(i, mVisited, vvNeighbor, count);
+    }
+    for(i = 0; i < n; i++)
+    {
+        cout << i << "'s reachable:" << endl;
+        for(iv = vvNeighbor[i].begin(); iv !=vvNeighbor[i].end(); iv++)
+            cout << *iv << "\t";
+        cout << endl;
+    }
+}
+    
+void SimpleGraph::BFS(int i, map<int, bool> &mVisited, vector<vector<int> > &vvNeighbor, int &count)
+{
+    if(vNode[i].mEdge.size() == 0)
+    {
+        count++;
+        cout << "working on " << i << "\t" << count << endl;
+        mVisited[i] = true;
+    }
+    else
+    {
+        map<int, int>::iterator imEdge;
+        vector<int>::iterator iv;
+        for(imEdge = vNode[i].mEdge.begin(); imEdge != vNode[i].mEdge.end(); imEdge++)
+        {
+            if(!mVisited[(*imEdge).first])
+            {
+                BFS((*imEdge).first, mVisited, vvNeighbor, count);
+            }
+            vvNeighbor[i].push_back((*imEdge).first);
+            for(iv = vvNeighbor[(*imEdge).first].begin(); iv != vvNeighbor[(*imEdge).first].end(); iv++)
+            {
+                vvNeighbor[i].push_back(*iv);
+            }
+            mVisited[(*imEdge).first] = true;
+        }
+        mVisited[i] = true;
+        count++;
+        cout << "working on " << i << "\t" << count << endl;
+        if(vvNeighbor[i].size())
+        {
+            sort(vvNeighbor[i].begin(), vvNeighbor[i].end());
+        }
+    }
+}
+
 void SimpleGraph::testSCC()
 {
     map<int, set<int> >::iterator imsSCC;

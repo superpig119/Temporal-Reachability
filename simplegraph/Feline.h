@@ -12,6 +12,7 @@ public:
 	bool Reachable(int s1, int s2);
 	
 	void findMaxCoor();
+    void postRoot(int i, map<int, bool> &mVisited);
 	void findFP();
 
 	void testNode();
@@ -23,6 +24,7 @@ public:
 	int nFP;			//false positive number
 	map<int, set<int> > msFP;
 	int coorMax;
+    map<int, int> mTopo;//Topo order
 
 //	map<int, set<int> > mheads;//out-neighbors
 };

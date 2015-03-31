@@ -74,6 +74,7 @@ void Feline::topologicalOrdering()
 	for(i = cnt - 1; i >= 0; i--)
 	{
 		vNode[TopoSort[i]].vCoor.push_back(cnt - i);
+        mTopo[cnt - i] = TopoSort[i];
 	}
 }
 	
@@ -143,16 +144,72 @@ void Feline::findFP()
 	cout << ">>>" << vr.size() << endl;
 //	for(ivr = vr.begin(); ivr != vr.end(); ivr++)
 //		cout << *ivr << "\t" << vNode[*ivr].vCoor[0] << "\t" << vNode[*ivr].vCoor[1] << endl;; 
+    findMaxCoor();
+    vector<nodeInfo>::iterator ivnode;
+	for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
+	{
+		cout << (*ivnode).ID << "\t" << (*ivnode).vMaxCoor[0] << "\t" << (*ivnode).vMaxCoor[1] << endl;
+	}
+    
 }
 
 void Feline::findMaxCoor()
 {
+    map<int, bool> mVisited;
 	vector<nodeInfo>::iterator ivnode;
+    int d = (*(vNode.begin())).vCoor.size();
+    int i;
 	for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
 	{
-
+        for(i = 0; i < d; i++)
+        {
+            (*ivnode).vMaxCoor.push_back(0);
+        }
+        mVisited[(*ivnode).ID] = false;
 	}
+    
+    for(i = 0; i < vNode.size(); i++)
+    {
+        if(!mVisited[mTopo[i]])
+        {
+            postRoot(i, mVisited);
+        }
+    }
 	
+}
+
+void Feline::postRoot(int i, map<int, bool> &mVisited)
+{
+    map<int, int>::iterator imEdge;
+    int j;
+    if(vNode[i].mEdge.size() != 0)
+    {
+        for(imEdge = vNode[i].mEdge.begin(); imEdge != vNode[i].mEdge.end(); imEdge++)
+        {
+            if(!mVisited[(*imEdge).first])
+                postRoot((*imEdge).first, mVisited);
+        }
+        mVisited[i] = true;
+        for(imEdge = vNode[i].mEdge.begin(); imEdge != vNode[i].mEdge.end(); imEdge++)
+        {
+            for(j = 0; j < vNode[0].vMaxCoor.size(); j++)
+            {
+                if(vNode[(*imEdge).first].vMaxCoor[j] > vNode[i].vMaxCoor[j])
+                {
+                    vNode[i].vMaxCoor[j] = vNode[(*imEdge).first].vMaxCoor[j];
+                }
+            }
+        }
+    }
+    else
+    {
+        int k;
+        for(k = 0; k < vNode[i].vCoor.size(); k++)
+        {
+            vNode[i].vMaxCoor[k] = vNode[i].vCoor[k];
+        }
+        mVisited[i] = true;
+    }
 }
 
 bool Feline::Reachable(int s1, int s2)
