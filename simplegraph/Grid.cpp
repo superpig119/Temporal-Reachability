@@ -5,7 +5,7 @@ void Grid::buildGrid(int max)
 	ifstream ininterval("ninterval");
 	int ninterval;
 	ininterval >> ninterval;
-	int step = max / ninterval;
+	step = max / ninterval;
 
 	vector<nodeInfo>::iterator ivnode;
 	vector<int>::iterator ivCoor;
@@ -23,6 +23,34 @@ void Grid::buildGrid(int max)
 	}
 }
 	
+vector<int> Grid::getNodes(int x1, int x2, int y1, int y2)
+{
+	int n1 = x1 / step;
+	int n2 = x2 / step;
+	int m1 = y1 / step;
+	int m2 = y2 / step;
+	int i, j;
+	cout << n1 << "\t" << n2 << "\t" << m1 << "\t" << m2 << endl;
+	vector<int> vR;
+	vector<nc>::iterator inc;
+	for(i = n1; i <= n2; i++)
+	{
+		for(j = m1; j <= m2; j++)
+		{
+			vector<int> vtmp;
+			vtmp.push_back(i);
+			vtmp.push_back(j);
+			for(inc = mgrid[vtmp].begin(); inc != mgrid[vtmp].end(); inc++)
+			{
+				vR.push_back((*inc).ID);
+		//		cout << (*inc).ID << endl;
+			}
+		}
+	}
+	sort(vR.begin(), vR.end());
+	return vR;
+}
+
 void Grid::showGrid()
 {
 	map<vector<int>, vector<nc> >::iterator igrid;	
