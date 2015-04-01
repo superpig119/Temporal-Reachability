@@ -17,6 +17,7 @@ int main()
 	f.coorCreate();
 	f.outputNodes();
 	f.outputEdges();
+    f.randomTest();
 //    f.reachBFS();
 //	f.findFP();
 	return 0;

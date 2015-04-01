@@ -280,8 +280,9 @@ void Feline::postRoot(int i, map<int, bool> &mVisited)
     }
 }
 
-bool Feline::Reachable(int s1, int s2)
+bool Feline::Reachable(int s1, int s2, int &level)
 {
+    level++;
 	if(s1 == s2)
 		return true;
 	if(vNode[s1] < vNode[s2])
@@ -289,7 +290,7 @@ bool Feline::Reachable(int s1, int s2)
 		map<int, int>::iterator imEdge;
 		for(imEdge = vNode[s1].mEdge.begin(); imEdge != vNode[s1].mEdge.end(); imEdge++)
 		{
-			if(Reachable((*imEdge).first, s2))
+			if(Reachable((*imEdge).first, s2, level))
 				return true;
 		}
 	}
@@ -335,4 +336,25 @@ void Feline::outputEdges()
 		}
 	}
 	ofile.close();
+}
+    
+void Feline::randomTest()
+{   
+    int n = vNode.size();
+    int n1, n2, i;
+    int level;
+    float mis = 0;
+    for(i = 0; i < n/2; i++)
+    {
+        level = 0;
+        srand(i);
+        n1 = rand() % n;
+        n2 = rand() % n;
+//       cout << n1 << "\t" << n2 << endl;
+        Reachable(n1, n2, level);
+        if(level > 1)
+            mis++;
+    }
+    float rate = mis/(n/2);
+    cout << "d:" << d << "\ttotal test:" << n/2 << "\tMiss:" << mis << "\tRate:" <<  rate << endl;
 }
