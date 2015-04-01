@@ -11,7 +11,7 @@ using namespace std;
 class SimpleGraph
 {
 public:
-	int buildGraph(const char* fileName);
+	int buildGraph();
 	bool findSCC();	//False:no SCC	True:has SCC
 	void tarjan(int i, vector<int> &vDFN, int &dIndex, int &Stop, vector<int> &vLOW, vector<bool> &vInstack, stack<nodeInfo> &sNode, int &Bcnt, vector<int> &vBelong);//Tarjan 
 	void condense();

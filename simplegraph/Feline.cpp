@@ -10,12 +10,33 @@ bool operator <(nodeInfo &n1, nodeInfo &n2)
 	}
 	return true;
 }
+	
+bool coorCompare(nodeInfo n1, nodeInfo n2)
+{
+	if(n1 < n2)
+		return true;
+	else
+	{
+		vector<int>::iterator iv1, iv2;
+		int t1 = 0;
+		int	t2 = 0;
+		for(iv1 = n1.vCoor.begin(); iv1 != n1.vCoor.end(); iv1++)
+			t1 += (*iv1);
+		for(iv2 = n2.vCoor.begin(); iv2 != n2.vCoor.end(); iv2++)
+			t2 += (*iv2);
+		if(t1 < t2)
+			return true;
+		else
+			return false;
+	}
+}
 
 void Feline::coorCreate()
 {
 	coorMax = vNode.size();
 	topologicalOrdering();
 	yCoor();
+	highDCoor();
 //	testNode();
 }
 
@@ -26,17 +47,18 @@ void Feline::yCoor()
 	int i;
 	for(i = 0; i < vNode.size(); i++)
 	{
-		md[i] = 0;
+		mdStatic[i] = 0;
 	}
 
 	for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
 	{
 		for(imEdge = (*ivnode).mEdge.begin(); imEdge != (*ivnode).mEdge.end(); imEdge++)
 		{
-			md[vNode[(*imEdge).first].ID]++;
+			mdStatic[vNode[(*imEdge).first].ID]++;
 		}
 	}
 
+	map<int, int> md(mdStatic);
 	map<int, int> roots;	//<x, sNum>
 	map<int, int>::reverse_iterator iroots;	
 	map<int, int>::iterator imd;
@@ -114,6 +136,52 @@ void Feline::DFS(int sNum, vector<bool> &visited, int &time, vector<int> &vd, ve
 	TopoSort[cnt++] = sNum;
 }
 
+void Feline::highDCoor()
+{
+	Conf cf;
+	cf.readConf();
+	d = cf.dimension;
+
+	int r = d - 2;
+	int i, j;
+	vector<nodeInfo>::iterator ivnode;
+	map<int, int>::iterator imEdge;
+	for(i = 0; i < r; i++)
+	{
+		map<int, int> md(mdStatic);//copy of mdStatic
+//		map<int, int> roots;	//<x, sNum>
+		vector<nodeInfo> roots;
+		vector<nodeInfo>::iterator iroots;	
+		map<int, int>::iterator imd;
+		for(imd = md.begin(); imd != md.end(); imd++)
+		{
+			if((*imd).second == 0)
+			{
+				roots.push_back(vNode[(*imd).first]);
+			}
+		}
+		sort(roots.begin(), roots.end(), coorCompare);
+	
+		int c = 1;
+		while(roots.size())
+		{
+			nodeInfo u = *(roots.end() - 1);
+			iroots = roots.end() - 1;
+			roots.erase(iroots);
+			vNode[u.ID].vCoor.push_back(c);
+			c++;
+			for(imEdge = vNode[u.ID].mEdge.begin(); imEdge != vNode[u.ID].mEdge.end(); imEdge++)
+			{
+				md[vNode[(*imEdge).first].ID]--;
+				if(md[vNode[(*imEdge).first].ID] == 0)
+				{
+					roots.push_back(vNode[(*imEdge).first]);
+				}
+			}
+			sort(roots.begin(), roots.end(), coorCompare);
+		}
+	}
+}
 
 void Feline::findFP()
 {
@@ -241,9 +309,15 @@ void Feline::outputNodes()
 {
 	ofstream ofile("coordinate");
 	vector<nodeInfo>::iterator ivnode;
+	vector<int>::iterator ivc;
 	for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
 	{
-		ofile << (*ivnode).ID << "\t" << (*ivnode).vCoor[0] << "\t" << (*ivnode).vCoor[1] << endl;
+		ofile << (*ivnode).ID;
+		for(ivc = (*ivnode).vCoor.begin(); ivc != (*ivnode).vCoor.end(); ivc++)
+		{
+			ofile << "\t" << *ivc;
+		}
+		ofile << endl;
 	}
 	ofile.close();
 }

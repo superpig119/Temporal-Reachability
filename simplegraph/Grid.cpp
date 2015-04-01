@@ -2,9 +2,10 @@
 
 void Grid::buildGrid(int max)
 {
-	ifstream ininterval("ninterval");
+	Conf cf;
+	cf.readConf();
 	int ninterval;
-	ininterval >> ninterval;
+	ninterval = cf.ninterval;
 	step = max / ninterval;
 
 	vector<nodeInfo>::iterator ivnode;

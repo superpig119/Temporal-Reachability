@@ -1,11 +1,13 @@
 #include "SimpleGraph.h"
 
-int SimpleGraph::buildGraph(const char* fileName)
+int SimpleGraph::buildGraph()
 {
-	ifstream infile(fileName);
+	Conf cf;
+	cf.readConf();
+	ifstream infile(cf.filename.c_str());
 	if(!infile)
     {
-        cout << "There is no data file named " << fileName << endl;
+        cout << "There is no data file named " << cf.filename << endl;
         return -1;
     }
     int lineNum;

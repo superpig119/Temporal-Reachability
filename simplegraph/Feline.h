@@ -9,6 +9,7 @@ public:
 	void yCoor();
 	void DFSTravel(int &cnt, vector<int> &TopoSort);
 	void DFS(int sNum, vector<bool> &visited, int &time, vector<int> &vd, vector<int> &vf, vector<int> &vParent, int &cnt, vector<int> &TopoSort);
+	void highDCoor();
 	bool Reachable(int s1, int s2);
 	
 	void findMaxCoor();
@@ -20,8 +21,9 @@ public:
 	void outputEdges();	//output edge file
 	void outputNodes();	//output coordiante file
 
-	map<int, int> md;	//in-neighbor number
+	map<int, int> mdStatic;	//in-neighbor number
 	int nFP;			//false positive number
+	int d;
 	map<int, set<int> > msFP;
 	int coorMax;
     map<int, int> mTopo;//Topo order
@@ -30,3 +32,4 @@ public:
 };
 
 bool operator <(nodeInfo &n1, nodeInfo &n2);
+bool coorCompare(nodeInfo n1, nodeInfo n2);

@@ -1,7 +1,7 @@
 CXX=g++
 
-onlineSearch:onlineSearch.o SimpleGraph.o Feline.o Grid.o
-	g++ -o onlineSearch onlineSearch.cpp SimpleGraph.o Feline.o Grid.o
+onlineSearch:onlineSearch.o SimpleGraph.o Feline.o Grid.o Conf.o
+	g++ -o onlineSearch onlineSearch.cpp SimpleGraph.o Feline.o Grid.o Conf.o
 	mv *.o ./obj
 	mv *.gch ./obj
 
@@ -13,6 +13,9 @@ Feline.o:Feline.cpp
 
 Grid.o:Grid.cpp
 	$(CXX) -c Grid.cpp Grid.h nodeInfo.h
+
+Conf.o:Conf.cpp
+	$(CXX) -c Conf.cpp Conf.h
 
 clean:
 	rm onlineSearch

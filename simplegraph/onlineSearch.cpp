@@ -2,15 +2,11 @@
 
 int main()
 {
-	ifstream infile("filename");
-	string filename;
-	infile >> filename;
-
 	Feline f;
-	if(f.buildGraph(filename.c_str()) != -1)
+	if(f.buildGraph() != -1)
     {
 	    f.hasSCC = f.findSCC();
-	//	sg.testGraph(sg.vnode);
+//		f.testGraph(f.vNode);
 //	    f.testSCC();
 	    f.condense();
 /*		if(f.hasSCC)
@@ -21,7 +17,7 @@ int main()
 	f.coorCreate();
 	f.outputNodes();
 	f.outputEdges();
-    f.reachBFS();
+//    f.reachBFS();
 //	f.findFP();
 	return 0;
 }
