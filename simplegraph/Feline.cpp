@@ -150,35 +150,44 @@ void Feline::highDCoor()
 	{
 		map<int, int> md(mdStatic);//copy of mdStatic
 //		map<int, int> roots;	//<x, sNum>
-		vector<nodeInfo> roots;
-		vector<nodeInfo>::iterator iroots;	
+//		vector<nodeInfo> roots;
+//		vector<nodeInfo>::iterator iroots;	
+        map<vector<int>, int> mroots;   //coor,ID
+        map<vector<int>, int>::iterator imroots;   //coor,ID
+        map<vector<int>, int>::reverse_iterator rimroots;   //coor,ID
 		map<int, int>::iterator imd;
 		for(imd = md.begin(); imd != md.end(); imd++)
 		{
 			if((*imd).second == 0)
 			{
-				roots.push_back(vNode[(*imd).first]);
+//				roots.push_back(vNode[(*imd).first]);
+                mroots[vNode[(*imd).first].vCoor] = (*imd).first;
 			}
 		}
-		sort(roots.begin(), roots.end(), coorCompare);
+//		sort(roots.begin(), roots.end(), coorCompare);
 	
 		int c = 1;
-		while(roots.size())
+		while(mroots.size())
 		{
-			nodeInfo u = *(roots.end() - 1);
-			iroots = roots.end() - 1;
-			roots.erase(iroots);
-			vNode[u.ID].vCoor.push_back(c);
+            int u = (*(mroots.rbegin())).second;
+            rimroots = mroots.rbegin();
+            mroots.erase((*rimroots).first);
+            vNode[u].vCoor.push_back(c);
+//			nodeInfo u = *(roots.end() - 1);
+//			iroots = roots.end() - 1;
+//			roots.erase(iroots);
+//			vNode[u.ID].vCoor.push_back(c);
 			c++;
-			for(imEdge = vNode[u.ID].mEdge.begin(); imEdge != vNode[u.ID].mEdge.end(); imEdge++)
+			for(imEdge = vNode[u].mEdge.begin(); imEdge != vNode[u].mEdge.end(); imEdge++)
 			{
 				md[vNode[(*imEdge).first].ID]--;
 				if(md[vNode[(*imEdge).first].ID] == 0)
 				{
-					roots.push_back(vNode[(*imEdge).first]);
+				//	roots.push_back(vNode[(*imEdge).first]);
+                    mroots[vNode[(*imEdge).first].vCoor] = vNode[(*imEdge).first].ID;
 				}
 			}
-			sort(roots.begin(), roots.end(), coorCompare);
+//			sort(roots.begin(), roots.end(), coorCompare);
 		}
 	}
 }

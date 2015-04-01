@@ -9,7 +9,7 @@ using namespace std;
 typedef struct NODEINFO
 {
 	int ID;			//node's orginal ID
-	map<int, int> mEdge;
+	map<int, int> mEdge;    //neighbor ID,1
 	vector<int> vCoor;
 	vector<int> vUnreachable;
 	vector<int> vMaxCoor;	//Max coordinate to reach
