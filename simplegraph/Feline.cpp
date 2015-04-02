@@ -167,6 +167,7 @@ void Feline::highDCoor()
 //		sort(roots.begin(), roots.end(), coorCompare);
 	
 		int c = 1;
+		
 		while(mroots.size())
 		{
             int u = (*(mroots.rbegin())).second;
@@ -177,6 +178,7 @@ void Feline::highDCoor()
 //			iroots = roots.end() - 1;
 //			roots.erase(iroots);
 //			vNode[u.ID].vCoor.push_back(c);
+			cout << i +2 << "\t" << c << "\t" << mroots.size() <<  endl;
 			c++;
 			for(imEdge = vNode[u].mEdge.begin(); imEdge != vNode[u].mEdge.end(); imEdge++)
 			{
