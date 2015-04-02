@@ -152,9 +152,9 @@ void Feline::highDCoor()
 //		map<int, int> roots;	//<x, sNum>
 //		vector<nodeInfo> roots;
 //		vector<nodeInfo>::iterator iroots;	
-        map<vector<int>, int> mroots;   //coor,ID
-        map<vector<int>, int>::iterator imroots;   //coor,ID
-        map<vector<int>, int>::reverse_iterator rimroots;   //coor,ID
+        map<vector<int>, int, vCompare> mroots;   //coor,ID
+        map<vector<int>, int, vCompare>::iterator imroots;   //coor,ID
+        map<vector<int>, int, vCompare>::reverse_iterator rimroots;   //coor,ID
 		map<int, int>::iterator imd;
 		for(imd = md.begin(); imd != md.end(); imd++)
 		{
