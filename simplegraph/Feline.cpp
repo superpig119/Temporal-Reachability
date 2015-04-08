@@ -3,7 +3,7 @@
 bool operator <(nodeInfo &n1, nodeInfo &n2)
 {
 	vector<int>::iterator iv1, iv2;
-	for(iv1 = n1.vCoor.begin(), iv2 = n2.vCoor.begin(); iv1 != n1.vCoor.end(); iv1++, iv2++)
+	for(iv1 = n1.vCoor.begin(), iv2 = n2.vCoor.begin(); iv1 != n1.vCoor.end() && iv2 != n2.vCoor.end(); iv1++, iv2++)
 	{
 		if(*iv1 >= *iv2)
 			return false;
@@ -156,29 +156,33 @@ void Feline::highDCoor()
         map<vector<int>, int, vCompare>::iterator imroots;   //coor,ID
         map<vector<int>, int, vCompare>::reverse_iterator rimroots;   //coor,ID
 		map<int, int>::iterator imd;
+        vector<int>::iterator ivi;
 		for(imd = md.begin(); imd != md.end(); imd++)
 		{
 			if((*imd).second == 0)
 			{
-//				roots.push_back(vNode[(*imd).first]);
                 mroots[vNode[(*imd).first].vCoor] = (*imd).first;
 			}
 		}
-//		sort(roots.begin(), roots.end(), coorCompare);
-	
+        cout << "mroots:" << endl;
+	    for(imroots = mroots.begin(); imroots != mroots.end(); imroots++)
+        {
+            cout << (*imroots).second << endl;
+        }
 		int c = 1;
 		
 		while(mroots.size())
 		{
             int u = (*(mroots.rbegin())).second;
             rimroots = mroots.rbegin();
-            mroots.erase((*rimroots).first);
+            ++rimroots;
+            mroots.erase(rimroots.base());
             vNode[u].vCoor.push_back(c);
 //			nodeInfo u = *(roots.end() - 1);
 //			iroots = roots.end() - 1;
 //			roots.erase(iroots);
 //			vNode[u.ID].vCoor.push_back(c);
-			cout << i +2 << "\t" << c << "\t" << mroots.size() <<  endl;
+			cout << i + 2 << "\t" << c << "\t" << mroots.size() <<  endl;
 			c++;
 			for(imEdge = vNode[u].mEdge.begin(); imEdge != vNode[u].mEdge.end(); imEdge++)
 			{
@@ -189,6 +193,7 @@ void Feline::highDCoor()
                     mroots[vNode[(*imEdge).first].vCoor] = vNode[(*imEdge).first].ID;
 				}
 			}
+            
 //			sort(roots.begin(), roots.end(), coorCompare);
 		}
 	}
@@ -355,6 +360,16 @@ void Feline::randomTest()
     int n1, n2, i;
     int level;
     float mis = 0;
+    if(hasSCC)
+    {
+        map<int, int>::iterator imOtoN;
+        cout << "mOtoN:" << endl;
+        for(imOtoN = mOtoN.begin(); imOtoN != mOtoN.end(); imOtoN++)
+        {
+            cout << (*imOtoN).first << "\t" << (*imOtoN).second << endl;
+        }
+    }
+    cout << "Reachable Test:" << endl;
     for(i = 0; i < n/2; i++)
     {
         level = 0;
@@ -362,9 +377,21 @@ void Feline::randomTest()
         n1 = rand() % n;
         n2 = rand() % n;
 //       cout << n1 << "\t" << n2 << endl;
-        Reachable(n1, n2, level);
-        if(level > 1)
+        int m1 = n1;
+        int m2 = n2;
+        if(hasSCC)
+        {
+            m1 = mOtoN[n1];
+            m2 = mOtoN[n2];
+        }
+        cout << n1 << "\t" << n2 << "\t" << m1 << "\t" << m2 << endl;
+       
+        bool b = Reachable(m1, m2, level);
+        if(level > 1 && !b)
+        {
             mis++;
+            cout << "Cannot reach:" << m1 << "\t" << m2 << endl;
+        }
     }
     float rate = mis/(n/2);
     cout << "d:" << d << "\ttotal test:" << n/2 << "\tMiss:" << mis << "\tRate:" <<  rate << endl;

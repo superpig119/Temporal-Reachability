@@ -44,12 +44,12 @@ public:
 	bool operator()(const vector<int> &v1, const vector<int> &v2) const
 	{
 		vector<int>::const_iterator  iv1, iv2;
-		for(iv1 = v1.begin(), iv2 = v2.begin(); iv1 != v1.end(); iv1++, iv2++)
+		for(iv1 = v1.begin(), iv2 = v2.begin(); iv1 != v1.end() && iv2 != v2.end(); iv1++, iv2++)
 		{
 			if(*iv1 >= *iv2)
 				break;
 		}
-		if(iv1 == v1.end())
+		if(iv1 == v1.end() || iv2 == v2.end())
 			return true;
 		else
 		{
@@ -59,7 +59,7 @@ public:
 				t1 += (*iv1);
 			for(iv2 = v2.begin(); iv2 != v2.end(); iv2++)
 				t2 += (*iv2);
-			if(t1 < t2)
+			if(t1 <= t2)
 				return true;
 			else
 				return false;
