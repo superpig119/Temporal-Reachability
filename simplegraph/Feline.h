@@ -2,6 +2,7 @@
 #include "Grid.h"
 #include <cstdlib>
 #include <ctime>
+#include <time.h>
 
 class Feline : public SimpleGraph
 {
