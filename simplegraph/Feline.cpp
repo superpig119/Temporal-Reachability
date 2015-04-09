@@ -11,26 +11,6 @@ bool operator <(nodeInfo &n1, nodeInfo &n2)
 	return true;
 }
 	
-bool coorCompare(nodeInfo n1, nodeInfo n2)
-{
-	if(n1 < n2)
-		return true;
-	else
-	{
-		vector<int>::iterator iv1, iv2;
-		int t1 = 0;
-		int	t2 = 0;
-		for(iv1 = n1.vCoor.begin(); iv1 != n1.vCoor.end(); iv1++)
-			t1 += (*iv1);
-		for(iv2 = n2.vCoor.begin(); iv2 != n2.vCoor.end(); iv2++)
-			t2 += (*iv2);
-		if(t1 < t2)
-			return true;
-		else
-			return false;
-	}
-}
-
 void Feline::coorCreate()
 {
 	coorMax = vNode.size();
