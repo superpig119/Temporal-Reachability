@@ -325,6 +325,7 @@ void Feline::randomTest()
     int n1, n2, i;
     int level;
     float mis = 0;
+    float online = 0;
     cout << "Reachable Test:" << endl;
     for(i = 0; i < n; i++)
     {
@@ -343,12 +344,21 @@ void Feline::randomTest()
    //     cout << n1 << "\t" << n2 << "\t" << m1 << "\t" << m2 << endl;
        
         bool b = Reachable(m1, m2, level);
-        if(level > 1 && !b)
+        //level>1 means it has to search online and m1 < m2
+        //!b means it is not reachable
+        //so it is False Positive Ratio
+        if(level > 1 && !b) 
         {
             mis++;
  //           cout << "Cannot reach:" << m1 << "\t" << m2 << endl;
         }
+        //online search ratio
+        if(level > 1)
+        {
+            online++;
+        }
     }
     float rate = mis/(n);
-    cout << "d:" << d << "\ttotal test:" << n/2 << "\tMiss:" << mis << "\tRate:" <<  rate << endl;
+    float onlineRate = online / n;
+    cout << "d:" << d << "\ttotal test:" << n/2 << "\tMiss:" << mis << "\tFPRate:" <<  rate << "\tOnline Rate:" << onlineRate << endl;
 }

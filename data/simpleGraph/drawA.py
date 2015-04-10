@@ -24,7 +24,7 @@ for line in lines:
 	x.append(int(s[0]))
 	y.append(float(s[1]))
 plt.plot(x,y)
-plt.axis([0,200,0,60])
+plt.axis([0,200,0,0.5])
 
 plt.show()
 
