@@ -26,7 +26,7 @@ int SimpleGraph::buildGraph()
 			infile >> dNode;
 			ni.mEdge[dNode] = 1;
 		}
-		vnode.push_back(ni);
+		vNode.push_back(ni);
 	}
     
     return 0;
@@ -40,11 +40,12 @@ bool SimpleGraph::findSCC()
     vector<int> vLOW(vnode.size(), 0);
     vector<bool> vInstack(vnode.size(), false);
     vector<int> vBelong(vnode.size(), -1);
-    stack<nodeInfo> sNode;
+//    stack<nodeInfo> sNode;
+    vector<nodeInfo> vsNode;
 //	memset(DFN,0,sizeof(DFN));//标记为为搜索过 
 	for (i = 0;i < vnode.size(); i++)
 		if (!vDFN[i])
-			tarjan(i, vDFN, dIndex, Stop, vLOW, vInstack, sNode, Bcnt, vBelong);
+			tarjan(i, vDFN, dIndex, Stop, vLOW, vInstack, vsNode, Bcnt, vBelong);
     for(i = 0; i< vnode.size(); i++)
     {
         msSCC[vBelong[i]].insert(i);
@@ -58,19 +59,19 @@ bool SimpleGraph::findSCC()
 //    testSCC();
 }
 
-void SimpleGraph::tarjan(int i, vector<int> &vDFN, int &dIndex, int &Stop, vector<int> &vLOW, vector<bool> &vInstack, stack<nodeInfo> &sNode, int &Bcnt, vector<int> &vBelong) 
+void SimpleGraph::tarjan(int i, vector<int> &vDFN, int &dIndex, int &Stop, vector<int> &vLOW, vector<bool> &vInstack, vector<nodeInfo> &vsNode, int &Bcnt, vector<int> &vBelong) 
 {
 	int j;
 	vDFN[i]=vLOW[i]=++dIndex; 
 	vInstack[i]=true; 
-    sNode.push(vnode[i]);
+    vsNode.push_back(vnode[i]);
 	map<int, int>::iterator imEdge;
     for(imEdge = vnode[i].mEdge.begin(); imEdge != vnode[i].mEdge.end(); imEdge++)
 	{
         j = vnode[(*imEdge).first].ID;
 		if (!vDFN[j])
 		{
-			tarjan(j, vDFN, dIndex, Stop, vLOW, vInstack, sNode, Bcnt, vBelong); 
+			tarjan(j, vDFN, dIndex, Stop, vLOW, vInstack, vsNode, Bcnt, vBelong); 
 			if (vLOW[j] < vLOW[i])
 				vLOW[i]= vLOW[j];
 		}
@@ -82,8 +83,9 @@ void SimpleGraph::tarjan(int i, vector<int> &vDFN, int &dIndex, int &Stop, vecto
 		Bcnt++;
 		do
 		{
-            nodeInfo n = sNode.top();
-            sNode.pop();
+            nodeInfo n = vsNode[vsNode.size() - 1];
+            //sNode.pop();
+            vsNode.pop_back();
             j = n.ID;
 			vInstack[j]=false; 
 			vBelong[j]=Bcnt;

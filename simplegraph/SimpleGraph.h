@@ -13,7 +13,7 @@ class SimpleGraph
 public:
 	int buildGraph();
 	bool findSCC();	//False:no SCC	True:has SCC
-	void tarjan(int i, vector<int> &vDFN, int &dIndex, int &Stop, vector<int> &vLOW, vector<bool> &vInstack, stack<nodeInfo> &sNode, int &Bcnt, vector<int> &vBelong);//Tarjan 
+	void tarjan(int i, vector<int> &vDFN, int &dIndex, int &Stop, vector<int> &vLOW, vector<bool> &vInstack, vector<nodeInfo> &vsNode, int &Bcnt, vector<int> &vBelong);//Tarjan 
 	void condense();
 	void reachBFS();
     void BFS(int i, map<int, bool> &mVisited, vector<vector<int> > &vvNeighbor, int &count);
