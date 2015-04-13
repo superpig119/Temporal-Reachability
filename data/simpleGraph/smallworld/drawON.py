@@ -1,5 +1,7 @@
 #!/usr/bin/python
 
+#Drawing the graph of Need Onlineserach ratio
+
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
@@ -10,6 +12,9 @@ filename = sys.argv[1]
 acc = open(filename)
 lines = acc.readlines()
 
+upperX = 200
+upperY = 0.5
+
 x= []
 y=[]
 oldx = 0;
@@ -17,14 +22,10 @@ oldy = 0;
 for line in lines:
 	s = line.split()
 	plt.plot(int(s[0]), float(s[1]), 's')
-#	if oldx != 0:
-#		plt.plot(oldx, int(s[0]), oldy, float(s[1]), 'b')
-#	oldx = int(s[0])
-#	oldy = float(s[1])
 	x.append(int(s[0]))
 	y.append(float(s[1]))
 plt.plot(x,y)
-plt.axis([0,200,0,0.5])
+plt.axis([0,upperX,0,upperY])
 
 plt.show()
 
