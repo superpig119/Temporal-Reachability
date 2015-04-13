@@ -326,6 +326,8 @@ void Feline::randomTest()
     int level;
     float mis = 0;
     float online = 0;
+    clock_t t1, t2;
+    t1 = clock();
     cout << "Reachable Test:" << endl;
     for(i = 0; i < n; i++)
     {
@@ -358,7 +360,11 @@ void Feline::randomTest()
             online++;
         }
     }
-    float rate = mis/(n);
+    t2 = clock();
+    float FPrate = mis/online;
+    float Accrate = 1 - mis/(n);
     float onlineRate = online / n;
-    cout << "d:" << d << "\ttotal test:" << n/2 << "\tMiss:" << mis << "\tFPRate:" <<  rate << "\tOnline Rate:" << onlineRate << endl;
+    cout << "d:" << d << "\ttotal test:" << n/2 << "\tMiss:" << mis << "\tFPRate:" <<  FPrate << "\tAcc Rate:" << Accrate << "\tOnline Rate:" << onlineRate << endl;
+    double duration = (double)(t2 - t1);
+    cout << "Average query time:" << duration / n / CLOCKS_PER_SEC << endl;
 }
