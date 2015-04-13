@@ -7,6 +7,7 @@ int main()
     {
 	    f.hasSCC = f.findSCC();
 //		f.testGraph(f.vNode);
+//		f.testGraph(f.vnode);
 //	    f.testSCC();
 	    f.condense();
 /*		if(f.hasSCC)
