@@ -157,7 +157,9 @@ void Feline::highDCoor()
 				md[vNode[(*imEdge).first].ID]--;
 				if(md[vNode[(*imEdge).first].ID] == 0)
 				{
+					cout << (*imEdge).first << endl;
                     mroots[vNode[(*imEdge).first].vCoor] = vNode[(*imEdge).first].ID;
+					cout << "???" << endl;
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 #! /bin/bash
 
-echo 0 > onRecur
+echo 0 > noRecur
 
 p=../data/simpleGraph/smallworld/10000/20/0.3/
 d=(2 3 4 5 6 10 20 50 100 200)
