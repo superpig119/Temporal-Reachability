@@ -333,7 +333,7 @@ void Feline::randomTest()
 {   
     int n = vNode.size();
     int n1, n2, i;
-    int level;
+    int level = 0;
     float mis = 0;
     float online = 0;
     clock_t t1, t2;
