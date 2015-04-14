@@ -134,6 +134,7 @@ void Feline::highDCoor()
         map<vector<int>, int, vCompare>::reverse_iterator rimroots;   //coor,ID
 		map<int, int>::iterator imd;
         vector<int>::iterator ivi;
+        vector<int>::const_iterator icvi;
 		for(imd = md.begin(); imd != md.end(); imd++)
 		{
 			if((*imd).second == 0)
@@ -158,7 +159,24 @@ void Feline::highDCoor()
 				if(md[vNode[(*imEdge).first].ID] == 0)
 				{
 					cout << (*imEdge).first << endl;
-                    mroots[vNode[(*imEdge).first].vCoor] = vNode[(*imEdge).first].ID;
+					for(imroots = mroots.begin(); imroots != mroots.end(); imroots++)
+					{
+						cout << "coor:";
+						for(icvi = (*imroots).first.begin(); icvi !=(*imroots).first.end(); icvi++)
+						{
+							cout << *icvi << "\t";
+						}
+						cout << endl << "ID" << (*imroots).second << endl;
+					}
+
+					cout << "The one to be inserted:";
+					for(ivi = vNode[(*imEdge).first].vCoor.begin(); ivi != vNode[(*imEdge).first].vCoor.end(); ivi++)
+					{
+						cout << *ivi << "\t";
+					}
+					cout << endl << "ID:" << vNode[(*imEdge).first].ID << endl;
+                    //mroots[vNode[(*imEdge).first].vCoor] = vNode[(*imEdge).first].ID;
+                    mroots.insert(pair<vector<int>, int>(vNode[(*imEdge).first].vCoor,vNode[(*imEdge).first].ID));
 					cout << "???" << endl;
 				}
 			}
