@@ -32,6 +32,7 @@ public:
 	map<int, set<int> > msFP;
 	int coorMax;
     map<int, int> mTopo;//Topo order
+	int noRecur;
 
 //	map<int, set<int> > mheads;//out-neighbors
 };

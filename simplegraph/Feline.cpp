@@ -263,19 +263,29 @@ void Feline::postRoot(int i, map<int, bool> &mVisited)
 
 bool Feline::Reachable(int s1, int s2, int &level)
 {
-    level++;
-	if(s1 == s2)
-		return true;
-	if(vNode[s1] < vNode[s2])
+	if(noRecur == 0)	//need online search
 	{
-		map<int, int>::iterator imEdge;
-		for(imEdge = vNode[s1].mEdge.begin(); imEdge != vNode[s1].mEdge.end(); imEdge++)
+		level++;
+		if(s1 == s2)
+			return true;
+		if(vNode[s1] < vNode[s2])
 		{
-			if(Reachable((*imEdge).first, s2, level))
-				return true;
+			map<int, int>::iterator imEdge;
+			for(imEdge = vNode[s1].mEdge.begin(); imEdge != vNode[s1].mEdge.end(); imEdge++)
+			{
+				if(Reachable((*imEdge).first, s2, level))
+					return true;
+			}
 		}
+		return false;
 	}
-	return false;
+	else
+	{
+		if(vNode[s1] < vNode[s2])
+			return true;
+		else
+			return false;
+	}
 }
 
 void Feline::testNode()
@@ -329,7 +339,12 @@ void Feline::randomTest()
     clock_t t1, t2;
     t1 = clock();
     cout << "Reachable Test:" << endl;
-    for(i = 0; i < n; i++)
+    
+	ifstream ifn("noRecur");
+	ifn >> noRecur;
+	ifn.close();
+
+	for(i = 0; i < n; i++)
     {
         level = 0;
         srand(i);
@@ -360,14 +375,14 @@ void Feline::randomTest()
     }
     t2 = clock();
     float FPrate = mis/online;
-    float Accrate = 1 - mis/(n);
+    float Accurate = 1 - mis/(n);
     float onlineRate = online / n;
-    cout << "d:" << d << "\ttotal test:" << n/2 << "\tMiss:" << mis << "\tFPRate:" <<  FPrate << "\tAcc Rate:" << Accrate << "\tOnline Rate:" << onlineRate << endl;
+    cout << "d:" << d << "\ttotal test:" << n/2 << "\tMiss:" << mis << "\tFPRate:" <<  FPrate << "\tAcc Rate:" << Accurate << "\tOnline Rate:" << onlineRate << endl;
     double duration = (double)(t2 - t1);
     cout << "Average query time:" << duration / n / CLOCKS_PER_SEC << endl;
 
     ofstream fACC("ACC", ofstream::app);
-    fACC << d << "\t" << Accrate << endl;
+    fACC << d << "\t" << Accurate << endl;
     fACC.close();
 
     ofstream fFPrate("FPrate", ofstream::app);
@@ -381,4 +396,14 @@ void Feline::randomTest()
     ofstream ftquery("tquery", ofstream::app);
     ftquery << d << "\t" << duration / n /CLOCKS_PER_SEC << endl;
     ftquery.close();
+	
+		
+	ofstream fn("noRecur");
+	{
+		if(Accurate == 1)
+			fn << 1;
+		else
+			fn << 0;
+	}
+	fn.close();
 }
