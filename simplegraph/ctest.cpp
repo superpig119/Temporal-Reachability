@@ -7,7 +7,7 @@ using namespace std;
 class vCompare
 {
 public:
-	bool operator()(const vector<int> &v1, const vector<int> &v2) 
+	bool operator()(const vector<int> &v1, const vector<int> &v2) const
 	{
 		vector<int>::const_iterator  iv1, iv2;
 		for(iv1 = v1.begin(), iv2 = v2.begin(); iv1 != v1.end() && iv2 != v2.end(); iv1++, iv2++)
