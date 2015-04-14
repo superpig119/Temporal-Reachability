@@ -1,6 +1,7 @@
 #include <vector>
 #include <map>
 #include "Conf.h"
+#include <sstream>
 
 using namespace std;
 

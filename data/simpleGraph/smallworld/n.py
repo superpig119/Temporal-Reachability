@@ -1,16 +1,25 @@
 #!/usr/bin/python
 
 import networkx as nx
+import random
+
+r=random
 
 #G=nx.star_graph(30)
 #nx.write_adjlist(G, "./star")
-
-G=nx.watts_strogatz_graph(10000,20, 0.3)
+G=nx.watts_strogatz_graph(100000, 200, 0.9)
+#D=nx.convert.convert_to_directed(G)
+"""edges=G.edges()
+for edge in edges:
+    ran=r.randint(0,1)   
+    (u,v)=edge
+    if ran==0:
+        D.remove_edge(u,v)
+    else:
+        D.remove_edge(v,u)"""
 nx.write_adjlist(G, "tmp")
 g=nx.read_adjlist("tmp", create_using=nx.DiGraph())
-#C=nx.strongly_connected_components(G)
 C=nx.condensation(g)
-print C
 
 nx.write_adjlist(C, "wssmall")
 

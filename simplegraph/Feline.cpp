@@ -120,7 +120,7 @@ void Feline::highDCoor()
 {
 	Conf cf;
 	cf.readConf();
-	d = cf.dimension;
+//	d = cf.dimension;
 
 	int r = d - 2;
 	int i, j;
@@ -335,16 +335,14 @@ void Feline::randomTest()
         srand(i);
         n1 = rand() % n;
         n2 = rand() % n;
-//       cout << n1 << "\t" << n2 << endl;
         int m1 = n1;
         int m2 = n2;
-        if(hasSCC)
+  /*      if(hasSCC)
         {
             m1 = mOtoN[n1];
             m2 = mOtoN[n2];
         }
-   //     cout << n1 << "\t" << n2 << "\t" << m1 << "\t" << m2 << endl;
-       
+    */   
         bool b = Reachable(m1, m2, level);
         //level>1 means it has to search online and m1 < m2
         //!b means it is not reachable
@@ -367,4 +365,20 @@ void Feline::randomTest()
     cout << "d:" << d << "\ttotal test:" << n/2 << "\tMiss:" << mis << "\tFPRate:" <<  FPrate << "\tAcc Rate:" << Accrate << "\tOnline Rate:" << onlineRate << endl;
     double duration = (double)(t2 - t1);
     cout << "Average query time:" << duration / n / CLOCKS_PER_SEC << endl;
+
+    ofstream fACC("ACC", ofstream::app);
+    fACC << d << "\t" << Accrate << endl;
+    fACC.close();
+
+    ofstream fFPrate("FPrate", ofstream::app);
+    fFPrate << d << "\t" << FPrate << endl;
+    fFPrate.close();
+
+    ofstream fonR("onR", ofstream::app);
+    fonR << d << "\t" << onlineRate << endl;
+    fonR.close();
+
+    ofstream ftquery("tquery", ofstream::app);
+    ftquery << d << "\t" << duration / n /CLOCKS_PER_SEC << endl;
+    ftquery.close();
 }
