@@ -148,36 +148,15 @@ void Feline::highDCoor()
 		{
             int u = (*(mroots.rbegin())).second;
             rimroots = mroots.rbegin();
-            ++rimroots;
-            mroots.erase(rimroots.base());
+            mroots.erase((++rimroots).base());
             vNode[u].vCoor.push_back(c);
-			//cout << i + 2 << "\t" << c << "\t" << mroots.size() <<  endl;
 			c++;
 			for(imEdge = vNode[u].mEdge.begin(); imEdge != vNode[u].mEdge.end(); imEdge++)
 			{
 				md[vNode[(*imEdge).first].ID]--;
 				if(md[vNode[(*imEdge).first].ID] == 0)
 				{
-					cout << (*imEdge).first << endl;
-					for(imroots = mroots.begin(); imroots != mroots.end(); imroots++)
-					{
-						cout << "coor:";
-						for(icvi = (*imroots).first.begin(); icvi !=(*imroots).first.end(); icvi++)
-						{
-							cout << *icvi << "\t";
-						}
-						cout << endl << "ID" << (*imroots).second << endl;
-					}
-
-					cout << "The one to be inserted:";
-					for(ivi = vNode[(*imEdge).first].vCoor.begin(); ivi != vNode[(*imEdge).first].vCoor.end(); ivi++)
-					{
-						cout << *ivi << "\t";
-					}
-					cout << endl << "ID:" << vNode[(*imEdge).first].ID << endl;
-                    //mroots[vNode[(*imEdge).first].vCoor] = vNode[(*imEdge).first].ID;
                     mroots.insert(pair<vector<int>, int>(vNode[(*imEdge).first].vCoor,vNode[(*imEdge).first].ID));
-					cout << "???" << endl;
 				}
 			}
 		}
@@ -283,7 +262,8 @@ void Feline::postRoot(int i, map<int, bool> &mVisited)
 
 bool Feline::Reachable(int s1, int s2, int &level)
 {
-	if(noRecur == 0)	//need online search
+//	if(noRecur == 0)	//need online search
+	if(1)
 	{
 		level++;
 		if(s1 == s2)

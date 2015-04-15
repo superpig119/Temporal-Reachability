@@ -51,7 +51,7 @@ public:
 			if(*iv1 >= *iv2)
 				break;
 		}
-		if(iv1 == v1.end() || iv2 == v2.end())
+		if((iv1 == v1.end() || iv2 == v2.end()))
 			return true;
 		else
 		{
@@ -61,8 +61,15 @@ public:
 				t1 += (*iv1);
 			for(iv2 = v2.begin(); iv2 != v2.end(); iv2++)
 				t2 += (*iv2);
-			if(t1 <= t2)
+			if(t1 < t2)
 				return true;
+			else if(t1 == t2)
+			{
+				if(v1[0] < v2[0])
+					return true;
+				else
+					return false;
+			}
 			else
 				return false;
 		}
