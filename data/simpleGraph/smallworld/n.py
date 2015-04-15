@@ -7,7 +7,7 @@ r=random
 
 #G=nx.star_graph(30)
 #nx.write_adjlist(G, "./star")
-G=nx.watts_strogatz_graph(100000, 200, 0.9)
+G=nx.watts_strogatz_graph(10000, 20, 0.9)
 #D=nx.convert.convert_to_directed(G)
 """edges=G.edges()
 for edge in edges:

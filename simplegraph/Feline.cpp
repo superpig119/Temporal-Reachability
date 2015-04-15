@@ -262,8 +262,7 @@ void Feline::postRoot(int i, map<int, bool> &mVisited)
 
 bool Feline::Reachable(int s1, int s2, int &level)
 {
-//	if(noRecur == 0)	//need online search
-	if(1)
+	if(noRecur == 0)	//need online search
 	{
 		level++;
 		if(s1 == s2)
