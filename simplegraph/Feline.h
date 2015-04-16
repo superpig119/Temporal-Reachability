@@ -4,6 +4,7 @@
 #include <ctime>
 #include <cmath>
 #include <time.h>
+#include <queue>
 
 class Feline : public SimpleGraph
 {
@@ -15,6 +16,7 @@ public:
 	void DFS(int sNum, vector<bool> &visited, int &time, vector<int> &vd, vector<int> &vf, vector<int> &vParent, int &cnt, vector<int> &TopoSort);
 	void highDCoor();
 	bool Reachable(int s1, int s2, int &level);
+    bool ReachableNoneRecur(int s1, int s2, int &level);
 	
 	void findMaxCoor();
     void postRoot(int i, map<int, bool> &mVisited);

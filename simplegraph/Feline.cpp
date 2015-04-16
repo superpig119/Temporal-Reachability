@@ -287,6 +287,47 @@ bool Feline::Reachable(int s1, int s2, int &level)
 	}
 }
 
+bool Feline::ReachableNoneRecur(int s1, int s2, int &level)
+{
+    if(noRecur == 0)
+    {
+        if(vNode[s1] < vNode[s2])
+        {
+            map<int, int> mvisited;
+			map<int, int>::iterator imEdge;
+            queue<int> q;
+            q.push(s1);
+            while(!q.empty())
+            {
+                level++;
+                int nt = q.front();
+                q.pop();
+			    for(imEdge = vNode[nt].mEdge.begin(); imEdge != vNode[nt].mEdge.end(); imEdge++)
+                {
+                    if((*imEdge).first == s2)
+                        return true;
+                    else
+                    {
+                        if(mvisited.find((*imEdge).first) == mvisited.end())
+                        {
+                            q.push((*imEdge).first);
+                            mvisited[(*imEdge).first] = 1;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    else
+    {
+		if(vNode[s1] < vNode[s2])
+			return true;
+		else
+			return false;
+    }
+}
+
 void Feline::testNode()
 {
 	vector<nodeInfo>::iterator ivnode;
@@ -345,7 +386,7 @@ void Feline::randomTest()
 
 	for(i = 0; i < n; i++)
     {
-		cout << i << endl;
+        cout << i << endl;
         level = 0;
         srand(i);
         n1 = rand() % n;
@@ -358,7 +399,8 @@ void Feline::randomTest()
             m2 = mOtoN[n2];
         }
     */   
-        bool b = Reachable(m1, m2, level);
+        bool b = ReachableNoneRecur(m1, m2, level);
+//        bool b = Reachable(m1, m2, level);
         //level>1 means it has to search online and m1 < m2
         //!b means it is not reachable
         //so it is False Positive Ratio

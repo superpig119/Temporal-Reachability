@@ -2,6 +2,13 @@
 
 echo 0 > Recur
 
+file=(ACC tquery tindex FPrate onR)
+for ((i=0;i<${#file[@]};i++)) do
+if [ -f "$file[i]" ]; then
+rm $file[i]
+fi
+done
+
 p=../data/simpleGraph/smallworld/100000/20/0.9/
 d=(2 3 4 5 6 10 20 50 100 200)
 
