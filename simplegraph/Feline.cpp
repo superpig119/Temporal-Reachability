@@ -339,12 +339,13 @@ void Feline::randomTest()
     t1 = clock();
     cout << "Reachable Test:" << endl;
     
-	ifstream ifn("noRecur");
+	ifstream ifn("Recur");
 	ifn >> noRecur;
 	ifn.close();
 
 	for(i = 0; i < n; i++)
     {
+		cout << i << endl;
         level = 0;
         srand(i);
         n1 = rand() % n;
@@ -376,7 +377,28 @@ void Feline::randomTest()
     float FPrate = mis/online;
     float Accurate = 1 - mis/(n);
     float onlineRate = online / n;
-    cout << "d:" << d << "\ttotal test:" << n/2 << "\tMiss:" << mis << "\tFPRate:" <<  FPrate << "\tAcc Rate:" << Accurate << "\tOnline Rate:" << onlineRate << endl;
+	if(noRecur == 1)
+	{
+		FPrate = 0;
+		Accurate = 1;
+		onlineRate = 0;
+	}
+	if(Accurate == 1)
+	{
+		onlineRate = 0;
+		noRecur = 1;
+		t1 = clock();
+		for(i = 0; i < n; i++)
+		{
+			srand(i);
+			n1 = rand() % n;
+			n2 = rand() % n;
+			bool b = Reachable(n1, n2, level);
+		}
+		t2 = clock();
+	}
+
+    cout << "d:" << d << "\ttotal test:" << n << "\tMiss:" << mis << "\tFPRate:" <<  FPrate << "\tAcc Rate:" << Accurate << "\tOnline Rate:" << onlineRate << endl;
     double duration = (double)(t2 - t1);
     cout << "Average query time:" << duration / n / CLOCKS_PER_SEC << endl;
 
@@ -397,7 +419,7 @@ void Feline::randomTest()
     ftquery.close();
 	
 		
-	ofstream fn("noRecur");
+	ofstream fn("Recur");
 	{
 		if(Accurate == 1)
 			fn << 1;

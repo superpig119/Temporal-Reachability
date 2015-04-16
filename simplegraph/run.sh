@@ -1,8 +1,8 @@
 #! /bin/bash
 
-echo 0 > noRecur
+echo 0 > Recur
 
-p=../data/simpleGraph/smallworld/10000/20/0.9/
+p=../data/simpleGraph/smallworld/100000/20/0.9/
 d=(2 3 4 5 6 10 20 50 100 200)
 
 for ((i=0;i<${#d[@]};i++)) do
