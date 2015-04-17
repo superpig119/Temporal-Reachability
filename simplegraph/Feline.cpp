@@ -308,7 +308,7 @@ bool Feline::ReachableNoneRecur(int s1, int s2, int &level)
                         return true;
                     else
                     {
-                        if(mvisited.find((*imEdge).first) == mvisited.end())
+                        if(mvisited.find((*imEdge).first) == mvisited.end() && vNode[(*imEdge).first] < vNode[s2])
                         {
                             q.push((*imEdge).first);
                             mvisited[(*imEdge).first] = 1;
@@ -371,7 +371,8 @@ void Feline::outputEdges()
     
 void Feline::randomTest()
 {   
-    int n = vNode.size();
+//    int n = vNode.size();
+	int n = 10000;
     int n1, n2, i;
     int level = 0;
     float mis = 0;
@@ -386,7 +387,6 @@ void Feline::randomTest()
 
 	for(i = 0; i < n; i++)
     {
-        cout << i << endl;
         level = 0;
         srand(i);
         n1 = rand() % n;
