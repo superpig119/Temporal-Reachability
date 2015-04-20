@@ -9,7 +9,7 @@ rm $file[i]
 fi
 done
 
-p=../data/simpleGraph/er/10000/0.15/
+p=../data/simpleGraph/er/10000/0.2/
 d=(2 3 4 5 6 10 20 50 100 200)
 
 for ((i=0;i<${#d[@]};i++)) do
