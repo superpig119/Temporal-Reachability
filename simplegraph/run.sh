@@ -9,8 +9,11 @@ rm $file[i]
 fi
 done
 
-p=../data/simpleGraph/scalefree/10000/3
-d=(2 3 4 5 6 10 20 50 100 200)
+#p=../data/simpleGraph/smallworld/d/10000/10/0.9
+p=../data/simpleGraph/bi
+#d=(2 3 4 5 6 10 20 50 100 200)
+d=(2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20)
+#d=(50)
 
 for ((i=0;i<${#d[@]};i++)) do
     echo ${d[i]}

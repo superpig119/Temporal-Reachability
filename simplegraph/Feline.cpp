@@ -65,6 +65,14 @@ void Feline::yCoor()
 			}
 		}
 	}
+
+	int j;
+	for(j = 0; j < vNode.size(); j++)
+		dp.push_back(0);
+	for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
+	{
+		dp[(*ivnode).ID] = (*ivnode).vCoor[1];
+	}
 }
 
 void Feline::topologicalOrdering()
@@ -105,10 +113,11 @@ void Feline::DFS(int sNum, vector<bool> &visited, int &time, vector<int> &vd, ve
 	nodeInfo n = vNode[sNum];
 	for(imEdge = n.mEdge.begin(); imEdge != n.mEdge.end(); imEdge++)
 	{
+		cout << (*imEdge).first << endl;
 		if(!visited[vNode[(*imEdge).first].ID])
 		{
 			vParent[vNode[(*imEdge).first].ID] = sNum;
-			DFS(vnode[(*imEdge).first].ID, visited, time, vd, vf, vParent, cnt, TopoSort);
+			DFS(vNode[(*imEdge).first].ID, visited, time, vd, vf, vParent, cnt, TopoSort);
 		}
 	}
 	time++;
@@ -160,6 +169,34 @@ void Feline::highDCoor()
 				}
 			}
 		}
+
+//This piece of code is to compare the k-1 and k coordinate
+//After initialization then call testD
+/*		int j;
+		if(i != 0)
+		{
+			for(j = 0; j < dp.size(); j++)
+				dp[j] = dq[j];
+		}
+
+		if(i == 0)
+		{
+			for(j = 0; j < vNode.size(); j++)
+				dq.push_back(0);
+			for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
+			{
+				dq[(*ivnode).ID] = (*ivnode).vCoor[i + 2];
+			}
+		}
+		else
+		{
+			for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
+			{
+				dq[(*ivnode).ID] = (*ivnode).vCoor[i + 2];
+			}
+		}
+		cout << endl << i+2 << " dimenstion" << endl;
+		testD();*/
 	}
 }
 
@@ -372,7 +409,7 @@ void Feline::outputEdges()
 void Feline::randomTest()
 {   
 //    int n = vNode.size();
-	int n = 10000;
+	int n = 4000;
     int n1, n2, i;
     int level = 0;
     float mis = 0;
@@ -385,12 +422,12 @@ void Feline::randomTest()
 	ifn >> noRecur;
 	ifn.close();
 
+        srand((unsigned)time(NULL));
 	for(i = 0; i < n; i++)
     {
         level = 0;
-        srand(i);
-        n1 = rand() % n;
-        n2 = rand() % n;
+        n1 = rand() % vNode.size();
+        n2 = rand() % vNode.size();
         int m1 = n1;
         int m2 = n2;
   /*      if(hasSCC)
@@ -399,7 +436,12 @@ void Feline::randomTest()
             m2 = mOtoN[n2];
         }
     */   
+		cout << m1 << "\t" << m2 << "\t:";
         bool b = ReachableNoneRecur(m1, m2, level);
+		if(!b)
+			cout << "cannot reach!" << endl;
+		else
+			cout << "can reach!" << endl;
 //        bool b = Reachable(m1, m2, level);
         //level>1 means it has to search online and m1 < m2
         //!b means it is not reachable
@@ -407,8 +449,9 @@ void Feline::randomTest()
         if(level > 1 && !b) 
         {
             mis++;
- //           cout << "Cannot reach:" << m1 << "\t" << m2 << endl;
+			cout << "FP!" << endl;
         }
+
         //online search ratio
         if(level > 1)
         {
@@ -432,9 +475,9 @@ void Feline::randomTest()
 		t1 = clock();
 		for(i = 0; i < n; i++)
 		{
-			srand(i);
-			n1 = rand() % n;
-			n2 = rand() % n;
+			n1 = rand() % vNode.size();
+			n2 = rand() % vNode.size();
+			level = 0;
 			bool b = Reachable(n1, n2, level);
 		}
 		t2 = clock();
@@ -469,4 +512,106 @@ void Feline::randomTest()
 			fn << 0;
 	}
 	fn.close();
+}
+	
+float Feline::EucliDistance(vector<int> &v1, vector<int> &v2)
+{
+	double dist = 0;
+	double tmp = 0;
+	vector<int>::iterator iv1, iv2;
+	for(iv1 = v1.begin(), iv2 = v2.begin(); iv1 != v1.end(); iv1++, iv2++)
+	{
+		tmp += pow(*iv1 - *iv2, 2);
+	}
+
+	return (float)sqrt(tmp);
+}
+
+
+int Feline::EditDistance(vector<int> &v1, vector<int> &v2)
+{
+	vector<int> t;
+	int i, j, upleft, tmp, up;
+	for(i = 0; i <= v1.size(); i++)
+		t.push_back(i);
+	for(i = 0; i <= v1.size(); i++)
+	{
+		upleft = t[0];
+		t[0] = i;
+		for(j = 1; j <= v1.size(); j++)
+		{
+			up = t[1];
+			if(v2[i-1] != v1[j-1])
+			{
+				tmp = t[j];
+				t[j] = min(min(up, t[j-1]), upleft) + 1;
+				upleft = tmp;
+			}
+			else
+			{
+				tmp = t[j];
+				t[j] = upleft;
+				upleft = tmp;
+			}
+		}
+	}
+
+	return t[v1.size()];
+}
+
+int Feline::LCS(vector<int> &v1, vector<int> &v2)
+{
+	vector<int> t;
+	int i, j, upleft, tmp, up;
+	for(i = 0; i <= v1.size(); i++)
+		t.push_back(0);
+	for(i = 0; i <= v1.size(); i++)
+	{
+		upleft = t[0];
+		t[0] = 0;
+		for(j = 1; j <= v1.size(); j++)
+		{
+			up = t[j];
+			if(v2[i-1] == v1[j-1])
+			{
+				tmp = t[j];
+				t[j] = upleft + 1;
+				upleft = tmp;
+			}
+			else
+			{
+				tmp = t[j];
+				t[j] = max(t[j-1], up);
+				upleft = tmp;
+			}
+		}
+	}
+	
+	vector<int>::iterator iv;
+	int max = 0;
+	for(iv = t.begin(); iv != t.end(); iv++)\
+		if(*iv > max)
+			max = *iv;
+
+	return max;
+}
+	
+int Feline::Diff(vector<int> &v1, vector<int> &v2)
+{
+	int dist = 0;
+	vector<int>::iterator iv1, iv2;
+	for(iv1 = v1.begin(), iv2 = v2.begin(); iv1 != v1.end(); iv1++, iv2++)
+	{
+		if(*iv1 != *iv2)
+			dist++;
+	}
+	return dist++;
+}
+
+void Feline::testD()
+{
+	cout << "Euclid Dist:\t" << EucliDistance(dp, dq) << endl;
+	cout << "Edit Dist:\t" << EditDistance(dp, dq) << endl;
+	cout << "Diff Dist:\t" << Diff(dp, dq) << endl;
+	cout << "LCS:\t" << LCS(dp, dq) << endl;
 }
