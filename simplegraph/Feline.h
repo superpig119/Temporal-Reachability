@@ -32,6 +32,7 @@ public:
 	void outputEdges();	//output edge file
 	void outputNodes();	//output coordiante file
 	void testD();
+	void testReachable();
 
     void randomTest();
 

@@ -446,14 +446,14 @@ void Feline::randomTest()
         //level>1 means it has to search online and m1 < m2
         //!b means it is not reachable
         //so it is False Positive Ratio
-        if(level > 1 && !b) 
+        if(level >= 1 && !b) 
         {
             mis++;
 			cout << "FP!" << endl;
         }
 
         //online search ratio
-        if(level > 1)
+        if(level >= 1)
         {
             online++;
         }
@@ -614,4 +614,34 @@ void Feline::testD()
 	cout << "Edit Dist:\t" << EditDistance(dp, dq) << endl;
 	cout << "Diff Dist:\t" << Diff(dp, dq) << endl;
 	cout << "LCS:\t" << LCS(dp, dq) << endl;
+}
+
+void Feline::testReachable()
+{
+	ifstream ifile("testPairs");
+	int t1,t2;
+	vector<int> v1,v2;
+	vector<int>::iterator iv1, iv2;
+	int level = 0;
+	while(ifile >> t1)
+	{
+		v1.push_back(t1);
+		ifile >> t2;
+		v2.push_back(t2);
+	}
+	
+	bool b;
+	noRecur = 0;
+	for(iv1 = v1.begin(), iv2 = v2.begin(); iv1 != v1.end(); iv1++, iv2++)
+	{
+		level = 0;
+		b = ReachableNoneRecur(*iv1, *iv2, level);
+		if(!b && level > 0)
+			cout << *iv1 <<  " and " << *iv2 << " are FP" << endl;
+		else if(!b)
+			cout << *iv1 <<  " and " << *iv2 << " cannot reach" << endl;
+		else
+			cout << *iv1 <<  " and " << *iv2 << " are reachable" << endl;
+	}
+
 }

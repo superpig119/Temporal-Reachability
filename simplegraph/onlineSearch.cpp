@@ -32,7 +32,9 @@ int main(int argc, char* argv[])
 
 	    f.outputNodes();
 	    f.outputEdges();
-        f.randomTest();
+
+		f.testReachable();
+//        f.randomTest();
     }
 	return 0;
 }
