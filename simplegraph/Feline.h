@@ -62,13 +62,16 @@ public:
 			if(*iv1 >= *iv2)
 				break;
 		}
-		if((iv1 == v1.end() || iv2 == v2.end()))
+		if(iv1 == v1.end() || iv2 == v2.end())
 			return true;
 		else
 		{
 			int t1 = 0;
 			int	t2 = 0;
-			float t11, t21;
+			float m1, m2;
+
+			int s1, s2;
+			int i;
 			for(iv1 = v1.begin(); iv1 != v1.end(); iv1++)
 			{
 				t1 += (*iv1);
@@ -77,8 +80,9 @@ public:
 			{
 				t2 += (*iv2);
 			}
-			t11 = t1 / v1.size();
-			t21 = t2 / v2.size();
+			m1 = t1 / v1.size();
+			m2 = t2 / v2.size();
+
 
 //			t1 = t11 / 2 + (*iv1) / 2;
 //			t2 = t21 / 2 + (*iv2) / 2;
@@ -87,8 +91,20 @@ public:
 				return true;
 			else if(t1==t2)
 			{
-				if(v1[0] < v2[0])
+				float d1 = 0;
+				float d2 = 0;
+				for(iv1 = v1.begin(); iv1 != v1.end(); iv1++)
+				{
+					d1 += pow(*iv1 - m1, 2);
+				}
+				for(iv2 = v2.begin(); iv2 != v2.end(); iv2++)
+				{
+					d2 += pow(*iv2 - m2, 2);
+				}
+				
+	//			if(v1[0] < v2[0])
 	//			if(*iv1 < *iv2)
+				if(d1 < d2)
 					return true;
 				else 
 					return false;
