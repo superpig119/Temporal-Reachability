@@ -60,15 +60,20 @@ public:
 		int t1 = 0;
 		int	t2 = 0;
 		bool f = true;
+		int min1, min2 = 10000000;
 		for(iv1 = v1.begin(), iv2 = v2.begin(); iv1 != v1.end() && iv2 != v2.end(); iv1++, iv2++)
 		{
+			if(*iv1 < min1)
+				min1 = *iv1;
+			if(*iv2 < min2)
+				min2 = *iv2;
 			t1 += *iv1;
 			t2 += *iv2;
 			if(*iv1 >= *iv2)
-				f = false;
+				f = false;	//v1 is not smaller than v2
 		}
 
-		if(f)	//phase1:compare ki
+		if(f)	//phase1:v1 is smaller than v2, next d should be bigger
 			return true;
 		else	//when ki is not comparable
 		{
@@ -95,22 +100,24 @@ public:
 				cout << endl;
 				cout << "t1:" << t1 << "\tt2:" << t2 << endl;
 				cout << "d1:" << d1 << "\td2:" << d2 << endl;
+				cout << "min1:" << min1 << "\tmin2:" << min2 << endl;
 				
-	//			if(v1[0] < v2[0])
-	//			if(*iv1 < *iv2)
 				if(d1 < d2)
 				{
 					return false;
 				}
 				else if(d1 == d2)
 				{
-					if(v1[v1.size() - 1] > v2[v2.size() - 1])
-						return false;
-					else
+					if(min1 < min2)
 						return true;
+					else if(v1[v1.size() - 1] < v2[v2.size() - 1])
+						return true;
+					else
+						return false;
 				}
 				else	//d1 > d2
 					return true;
+		
 			}
 			else	//t1>t2
 				return false;
