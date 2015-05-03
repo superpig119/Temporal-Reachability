@@ -57,57 +57,60 @@ public:
 	bool operator()(const vector<int> &v1, const vector<int> &v2) const
 	{
 		vector<int>::const_iterator  iv1, iv2;
+		int t1 = 0;
+		int	t2 = 0;
+		bool f = true;
 		for(iv1 = v1.begin(), iv2 = v2.begin(); iv1 != v1.end() && iv2 != v2.end(); iv1++, iv2++)
 		{
+			t1 += *iv1;
+			t2 += *iv2;
 			if(*iv1 >= *iv2)
-				break;
+				f = false;
 		}
-		if(iv1 == v1.end() || iv2 == v2.end())
+
+		if(f)	//phase1:compare ki
 			return true;
-		else
+		else	//when ki is not comparable
 		{
-			int t1 = 0;
-			int	t2 = 0;
-			float m1, m2;
-
-			int s1, s2;
-			int i;
-			for(iv1 = v1.begin(); iv1 != v1.end(); iv1++)
-			{
-				t1 += (*iv1);
-			}
-			for(iv2 = v2.begin(); iv2 != v2.end(); iv2++)
-			{
-				t2 += (*iv2);
-			}
-			m1 = t1 / v1.size();
-			m2 = t2 / v2.size();
-
-
-//			t1 = t11 / 2 + (*iv1) / 2;
-//			t2 = t21 / 2 + (*iv2) / 2;
-				
-			if(t1 < t2)
+			if(t1 < t2)	//phase2:compare sum
 				return true;
-			else if(t1==t2)
+			else if(t1 == t2)	//phase3:compare deviation
 			{
+				float m1, m2;
+				m1 = t1 / v1.size();
+				m2 = t2 / v2.size();
 				float d1 = 0;
 				float d2 = 0;
 				for(iv1 = v1.begin(); iv1 != v1.end(); iv1++)
 				{
 					d1 += pow(*iv1 - m1, 2);
+					cout << *iv1 << "\t";
 				}
+				cout << endl;
 				for(iv2 = v2.begin(); iv2 != v2.end(); iv2++)
 				{
 					d2 += pow(*iv2 - m2, 2);
+					cout << *iv2 << "\t";
 				}
+				cout << endl;
+				cout << "t1:" << t1 << "\tt2:" << t2 << endl;
+				cout << "d1:" << d1 << "\td2:" << d2 << endl;
 				
 	//			if(v1[0] < v2[0])
 	//			if(*iv1 < *iv2)
 				if(d1 < d2)
-					return true;
-				else 
+				{
 					return false;
+				}
+				else if(d1 == d2)
+				{
+					if(v1[v1.size() - 1] > v2[v2.size() - 1])
+						return false;
+					else
+						return true;
+				}
+				else	//d1 > d2
+					return true;
 			}
 			else	//t1>t2
 				return false;
