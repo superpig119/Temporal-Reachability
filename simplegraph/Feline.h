@@ -15,6 +15,7 @@ public:
 	void DFSTravel(int &cnt, vector<int> &TopoSort);
 	void DFS(int sNum, vector<bool> &visited, int &time, vector<int> &vd, vector<int> &vf, vector<int> &vParent, int &cnt, vector<int> &TopoSort);
 	void highDCoor();
+	void highDCoorv2();
 	bool Reachable(int s1, int s2, int &level);
     bool ReachableNoneRecur(int s1, int s2, int &level);
 	

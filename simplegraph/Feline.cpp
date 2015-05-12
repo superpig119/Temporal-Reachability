@@ -123,6 +123,19 @@ void Feline::DFS(int sNum, vector<bool> &visited, int &time, vector<int> &vd, ve
 	vf[sNum] = time;
 	TopoSort[cnt++] = sNum;
 }
+	
+void highDCoorv2();
+{
+	int r = d - 2;
+	int i;
+
+	for(i = 0; i < r; i++)
+	{
+		map<int, int> md(mdStatic);
+		map<vector<int, int, vCompare>> mroots;
+	}
+
+}
 
 void Feline::highDCoor()
 {
