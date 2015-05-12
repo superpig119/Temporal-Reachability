@@ -2,11 +2,14 @@
 
 int main(int argc, char* argv[])
 {
-    stringstream ss;
 	Feline f;
+    stringstream ss;
     ss << argv[1];
     ss >> f.d;
     cout << f.d << endl;
+
+//	f.findOptD();
+
 	if(f.buildGraph() != -1)
     {
 //	    f.hasSCC = f.findSCC();
@@ -32,9 +35,9 @@ int main(int argc, char* argv[])
 
 	    f.outputNodes();
 	    f.outputEdges();
-
-		f.testReachable();
-//        f.randomTest();
+	
+//		f.testReachable();
+        f.randomTest();
     }
 	return 0;
 }

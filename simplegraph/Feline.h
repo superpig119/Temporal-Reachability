@@ -18,6 +18,7 @@ public:
 	bool Reachable(int s1, int s2, int &level);
     bool ReachableNoneRecur(int s1, int s2, int &level);
 	
+	void findOptD();
 	void findMaxCoor();
     void postRoot(int i, map<int, bool> &mVisited);
 	void findFP();
@@ -34,6 +35,7 @@ public:
 	void testD();
 	void testReachable();
 
+	void genTestSet();
     void randomTest();
 
 	map<int, int> mdStatic;	//in-neighbor number
@@ -44,6 +46,7 @@ public:
     map<int, int> mTopo;//Topo order
 	int noRecur;
 	vector<int> dp, dq; //coordinates for neighbor dimensions
+	map<pair<int, int>, int > mRandom;
 
 //	map<int, set<int> > mheads;//out-neighbors
 };
@@ -89,18 +92,18 @@ public:
 				for(iv1 = v1.begin(); iv1 != v1.end(); iv1++)
 				{
 					d1 += pow(*iv1 - m1, 2);
-					cout << *iv1 << "\t";
+//					cout << *iv1 << "\t";
 				}
-				cout << endl;
+//				cout << endl;
 				for(iv2 = v2.begin(); iv2 != v2.end(); iv2++)
 				{
 					d2 += pow(*iv2 - m2, 2);
-					cout << *iv2 << "\t";
+//					cout << *iv2 << "\t";
 				}
-				cout << endl;
-				cout << "t1:" << t1 << "\tt2:" << t2 << endl;
-				cout << "d1:" << d1 << "\td2:" << d2 << endl;
-				cout << "min1:" << min1 << "\tmin2:" << min2 << endl;
+//				cout << endl;
+//				cout << "t1:" << t1 << "\tt2:" << t2 << endl;
+//				cout << "d1:" << d1 << "\td2:" << d2 << endl;
+//				cout << "min1:" << min1 << "\tmin2:" << min2 << endl;
 				
 				if(d1 < d2)
 				{

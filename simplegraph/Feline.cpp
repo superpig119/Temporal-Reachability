@@ -1,5 +1,4 @@
 #include "Feline.h"
-
 bool operator <(nodeInfo &n1, nodeInfo &n2)
 {
 	vector<int>::iterator iv1, iv2;
@@ -113,7 +112,7 @@ void Feline::DFS(int sNum, vector<bool> &visited, int &time, vector<int> &vd, ve
 	nodeInfo n = vNode[sNum];
 	for(imEdge = n.mEdge.begin(); imEdge != n.mEdge.end(); imEdge++)
 	{
-		cout << (*imEdge).first << endl;
+	//	cout << (*imEdge).first << endl;
 		if(!visited[vNode[(*imEdge).first].ID])
 		{
 			vParent[vNode[(*imEdge).first].ID] = sNum;
@@ -130,6 +129,7 @@ void Feline::highDCoor()
 	Conf cf;
 	cf.readConf();
 //	d = cf.dimension;
+	genTestSet();
 
 	int r = d - 2;
 	int i, j;
@@ -170,6 +170,10 @@ void Feline::highDCoor()
 			}
 		}
 
+		cout << endl << i + 2<< endl;
+		randomTest();
+		if(noRecur == 1)
+			break;
 //This piece of code is to compare the k-1 and k coordinate
 //After initialization then call testD
 /*		int j;
@@ -405,11 +409,59 @@ void Feline::outputEdges()
 	}
 	ofile.close();
 }
-    
+
+void Feline::findOptD()
+{
+	int i;
+	noRecur = 1;
+	for(i = 2; i < 300; i++)
+	{
+		d = i;
+		if(noRecur)
+		{
+			if(buildGraph() != -1)
+			{
+				clock_t t1, t2;
+				t1 = clock();
+				coorCreate();
+				t2 = clock();
+				double duration = (double)(t2 - t1);
+				cout << "Index Construction time:" << duration / CLOCKS_PER_SEC << endl;
+      
+				ofstream ftindex("tindex", ofstream::app);
+				ftindex << d << "\t" << duration / CLOCKS_PER_SEC << endl;
+				ftindex.close();
+
+				outputNodes();
+				outputEdges();
+				randomTest();
+			}
+		}
+		else
+		{
+			cout << i << " is the optimal dimension" << endl;
+			break;
+		}
+	}
+}
+
+void Feline::genTestSet()
+{
+	int i, n1, n2;
+	int ttest = vNode.size() *10;
+	for(i = 0; i < ttest; i++)
+	{
+        n1 = rand() % vNode.size();
+        n2 = rand() % vNode.size();
+		pair<int, int> ptmp = make_pair(n1, n2);
+		mRandom[ptmp] = 1;
+	}
+}
+
 void Feline::randomTest()
 {   
-//    int n = vNode.size();
-	int n = 4000;
+    int n = vNode.size();
+//	int n = 4000;
     int n1, n2, i;
     int level = 0;
     float mis = 0;
@@ -422,26 +474,29 @@ void Feline::randomTest()
 	ifn >> noRecur;
 	ifn.close();
 
-        srand((unsigned)time(NULL));
-	for(i = 0; i < n; i++)
+	int ttest = 10 * n;
+    srand((unsigned)time(NULL));
+	map<pair<int, int>, int >::iterator imR;
+	ttest = mRandom.size();
+	for(i = 0, imR = mRandom.begin(); i < ttest; i++, imR++)
     {
         level = 0;
-        n1 = rand() % vNode.size();
-        n2 = rand() % vNode.size();
-        int m1 = n1;
-        int m2 = n2;
+//        n1 = rand() % vNode.size();
+//        n2 = rand() % vNode.size();
+        int m1 = (*imR).first.first;
+        int m2 = (*imR).first.second;
   /*      if(hasSCC)
         {
             m1 = mOtoN[n1];
             m2 = mOtoN[n2];
         }
     */   
-		cout << m1 << "\t" << m2 << "\t:";
+//		cout << m1 << "\t" << m2 << "\t:";
         bool b = ReachableNoneRecur(m1, m2, level);
-		if(!b)
+/*		if(!b)
 			cout << "cannot reach!" << endl;
 		else
-			cout << "can reach!" << endl;
+			cout << "can reach!" << endl;*/
 //        bool b = Reachable(m1, m2, level);
         //level>1 means it has to search online and m1 < m2
         //!b means it is not reachable
@@ -449,7 +504,7 @@ void Feline::randomTest()
         if(level >= 1 && !b) 
         {
             mis++;
-			cout << "FP!" << endl;
+//			cout << "FP!" << endl;
         }
 
         //online search ratio
@@ -460,8 +515,8 @@ void Feline::randomTest()
     }
     t2 = clock();
     float FPrate = mis/online;
-    float Accurate = 1 - mis/(n);
-    float onlineRate = online / n;
+    float Accurate = 1 - mis/(ttest);
+    float onlineRate = online / ttest;
 	if(noRecur == 1)
 	{
 		FPrate = 0;
@@ -473,7 +528,7 @@ void Feline::randomTest()
 		onlineRate = 0;
 		noRecur = 1;
 		t1 = clock();
-		for(i = 0; i < n; i++)
+		for(i = 0; i < ttest; i++)
 		{
 			n1 = rand() % vNode.size();
 			n2 = rand() % vNode.size();
@@ -483,9 +538,9 @@ void Feline::randomTest()
 		t2 = clock();
 	}
 
-    cout << "d:" << d << "\ttotal test:" << n << "\tMiss:" << mis << "\tFPRate:" <<  FPrate << "\tAcc Rate:" << Accurate << "\tOnline Rate:" << onlineRate << endl;
+    cout << "d:" << d << "\ttotal test:" << ttest << "\tMiss:" << mis << "\tFPRate:" <<  FPrate << "\tAcc Rate:" << Accurate << "\tOnline Rate:" << onlineRate << endl;
     double duration = (double)(t2 - t1);
-    cout << "Average query time:" << duration / n / CLOCKS_PER_SEC << endl;
+    cout << "Average query time:" << duration / ttest / CLOCKS_PER_SEC << endl;
 
     ofstream fACC("ACC", ofstream::app);
     fACC << d << "\t" << Accurate << endl;
