@@ -28,6 +28,20 @@ int SimpleGraph::buildGraph()
 		}
 		vNode.push_back(ni);
 	}
+
+	infile.clear();
+	infile.seek(0);
+	infile >> lineNum;
+	for(i = 0; i < lineNum; i++)
+	{
+		infile >> sNode;
+		infile >> edgeNum;
+		for(j = 0; j < edgeNum; j++)
+		{
+			infile >> dNode;
+			vNode[dNode].vParent.push_back(sNode);
+		}
+	}
     
     return 0;
 }
