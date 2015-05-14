@@ -30,6 +30,7 @@ public:
 	int LCS(vector<int> &v1, vector<int> &v2);
 
 	void testNode();
+    void testParent();
     void showEdges();	
 	void outputEdges();	//output edge file
 	void outputNodes();	//output coordiante file

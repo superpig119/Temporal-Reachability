@@ -17,6 +17,7 @@ int main(int argc, char* argv[])
 //		f.testGraph(f.vnode);
 //	    f.testSCC();
 //	    f.condense();
+        f.testParent();
 //		f.testGraph(f.vNode);
 /*		if(f.hasSCC)
 		    f.testGraph(f.vNode);
@@ -32,7 +33,7 @@ int main(int argc, char* argv[])
         ofstream ftindex("tindex", ofstream::app);
         ftindex << argv[1] << "\t" << duration / CLOCKS_PER_SEC << endl;
         ftindex.close();
-
+    
 	    f.outputNodes();
 	    f.outputEdges();
 	

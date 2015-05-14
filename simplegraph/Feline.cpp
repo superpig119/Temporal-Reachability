@@ -124,7 +124,7 @@ void Feline::DFS(int sNum, vector<bool> &visited, int &time, vector<int> &vd, ve
 	TopoSort[cnt++] = sNum;
 }
 	
-void highDCoorv2();
+void Feline::highDCoorv2()
 {
 	int r = d - 2;
 	int i;
@@ -132,7 +132,7 @@ void highDCoorv2();
 	for(i = 0; i < r; i++)
 	{
 		map<int, int> md(mdStatic);
-		map<vector<int, int, vCompare>> mroots;
+		//map<vector<int, int, vCompare> > mroots;
 	}
 
 }
@@ -421,6 +421,21 @@ void Feline::outputEdges()
 		}
 	}
 	ofile.close();
+}
+
+void Feline::testParent()
+{
+	vector<nodeInfo>::iterator ivnode;
+    vector<int>::iterator ivParent;
+    for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
+    {
+        cout << (*ivnode).ID << "'s Parents are:\t";
+        for(ivParent = (*ivnode).vParent.begin(); ivParent != (*ivnode).vParent.end(); ivParent++)
+        {
+            cout << *ivParent << "\t";
+        }
+        cout << endl;
+    }
 }
 
 void Feline::findOptD()

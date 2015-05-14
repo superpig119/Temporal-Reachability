@@ -30,7 +30,7 @@ int SimpleGraph::buildGraph()
 	}
 
 	infile.clear();
-	infile.seek(0);
+	infile.seekg(ios_base::beg);
 	infile >> lineNum;
 	for(i = 0; i < lineNum; i++)
 	{
