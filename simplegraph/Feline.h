@@ -5,6 +5,8 @@
 #include <cmath>
 #include <time.h>
 #include <queue>
+#include <stack>
+#include <algorithm>
 
 class Feline : public SimpleGraph
 {
@@ -18,6 +20,8 @@ public:
 	void highDCoorv2();
 	bool Reachable(int s1, int s2, int &level);
     bool ReachableNoneRecur(int s1, int s2, int &level);
+	void Sample(map<int,int> &mFPNumber);
+	void FPRemoveFromParent(map<int, int> &mFPNumber);
 	
 	void findOptD();
 	void findMaxCoor();
@@ -55,6 +59,7 @@ public:
 
 bool operator <(nodeInfo &n1, nodeInfo &n2);
 bool coorCompare(nodeInfo n1, nodeInfo n2);
+bool vFPCompare(const pair<int,int> &v1, const pair<int,int> &v2);
 
 class vCompare
 {
@@ -129,3 +134,4 @@ public:
 		}
 	}
 };
+

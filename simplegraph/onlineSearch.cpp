@@ -7,7 +7,10 @@ int main(int argc, char* argv[])
     ss << argv[1];
     ss >> f.d;
     cout << f.d << endl;
-
+	
+	ofstream oRecur("Recur");
+	oRecur << 0;
+	oRecur.close();
 //	f.findOptD();
 
 	if(f.buildGraph() != -1)
@@ -36,9 +39,11 @@ int main(int argc, char* argv[])
     
 	    f.outputNodes();
 	    f.outputEdges();
-	
+		map<int, int> mFPNumber;
+		f.Sample(mFPNumber);
+		f.FPRemoveFromParent(mFPNumber);
 //		f.testReachable();
-        f.randomTest();
+//        f.randomTest();
     }
 	return 0;
 }
