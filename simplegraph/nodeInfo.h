@@ -15,5 +15,6 @@ typedef struct NODEINFO
 	vector<int> vCoor;
 	vector<int> vUnreachable;
 	vector<int> vMaxCoor;	//Max coordinate to reach
+	int level;	//the topological level
 }nodeInfo;
 #endif

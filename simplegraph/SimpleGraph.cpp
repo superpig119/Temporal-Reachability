@@ -21,6 +21,7 @@ int SimpleGraph::buildGraph()
 		infile >> edgeNum;
 		nodeInfo ni;
 		ni.ID = sNode;
+		ni.level = -1;
 		for(j = 0; j < edgeNum; j++)
 		{
 			infile >> dNode;

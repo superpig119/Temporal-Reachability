@@ -82,6 +82,37 @@ void Feline::yCoor()
 	}
 }
 
+void Feline::topoLevel()
+{
+	map<int,int> md(mdStatic);
+	map<int,int>::iterator imd;
+	map<int, bool> mvisited;
+	queue<int> qnode;
+	for(imd = md.begin(); imd != md.end(); imd++)
+	{
+		if((*imd).second == 0)
+		{
+            qnode.push((*imd).first);
+			vNode[(*imd).first].level = 0;
+		}
+	}
+
+	int n;
+	map<int, int>::iterator imEdge;
+	while(!qnode.empty())
+	{
+		n = qnode.top;
+		qnode.pop();
+		for(im = vNode[n].mEdge.begin(); im != vNode[n].mEdge.end(); im++)
+		{
+			qnode.push((*im).first);
+			if(vNode[n].level + 1 > vNode[(*im).first].level)
+			{
+				vNode[(*im).first].level = vNode[n].level + 1;
+			}
+		}
+	}
+}
 void Feline::topologicalOrdering()
 {
 	int cnt = 0;
@@ -144,6 +175,7 @@ void Feline::highDCoorv2()
 	}
 
 }
+
 
 void Feline::highDCoor()
 {
@@ -234,6 +266,7 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
     map<vector<int>, int, vCompare>::reverse_iterator rimroots;   //coor,ID
 	map<int, int>::iterator imd;
 	map<int, int>::iterator imFP;
+	map<int, int>::iterator imEdge;
     vector<int>::iterator ivi;
     vector<int>::const_iterator icvi;
 	map<int, bool> mvisited;
@@ -248,45 +281,93 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
 	int c = 1;
 	
 	cout << "mFPNumber size:" << mFPNumber.size() << endl;
-	vector<pair<int, int> >  vFP;
+	vector<pair<int, int> > vFP;	//Store the FP from the map to vector
 	vector<pair<int, int> >::iterator  ivFP;
 	for(imFP = mFPNumber.begin(); imFP != mFPNumber.end(); imFP++)
 	{
 		vFP.push_back(make_pair((*imFP).first, (*imFP).second));
 	}
 	cout << "vFP size:" << vFP.size() << endl;
-	sort(vFP.begin(), vFP.end(), vFPCompare);
+	sort(vFP.begin(), vFP.end(), vFPCompare);	//sort,FP num desend
 	for(ivFP = vFP.begin(); ivFP != vFP.end(); ivFP++)
 	{
 		cout << "Node number:" << (*ivFP).first << "\tFalse Positive number:" << (*ivFP).second << endl;
 	}
 	
-	stack<int> svisited;
-	queue<int> qvisited;
+	stack<int> svisited;	//Reverse tree scan,from point to roots
+	queue<int> qvisited;	//Queue for visiting the parents
 	vector<int>::iterator ivParent;
+	int qn,sn;
+	cout << "in stack:" << endl;
 	for(ivFP = vFP.begin(); ivFP != vFP.end(); ivFP++)
 	{
+		if(mvisited.find((*ivFP).first) != mvisited.end())
+			continue;
 		qvisited.push((*ivFP).first);
+		mvisited[(*ivFP).first] = true;
+		svisited.push((*ivFP).first);
 		while(!qvisited.empty())
 		{
-			int qn = qvisited.pop();
+			qn = qvisited.front();
+			qvisited.pop();
 			for(ivParent = vNode[qn].vParent.begin(); ivParent != vNode[qn].vParent.end(); ivParent++)
 			{
 				if(mvisited.find(*ivParent) == mvisited.end())
 				{
 					mvisited[(*ivParent)] = true;
 					svisited.push((*ivParent));
-					if(!vNode[(*ivParent)].vParent.empty())
+					if(md[*ivParent] != 0)
 					{
 						qvisited.push((*ivParent));
 					}
 				}
 			}
 		}
+		while(!svisited.empty())	
+		{
+			sn = svisited.top();
+			svisited.pop();
+			imroots = mroots.find(vNode[sn].vCoor);
+			if(imroots != mroots.end())
+			{
+				mroots.erase(imroots);
+			}
+            vNode[sn].vCoor.push_back(c);
+			for(imEdge = vNode[sn].mEdge.begin(); imEdge != vNode[sn].mEdge.end(); imEdge++)
+			{
+				md[vNode[(*imEdge).first].ID]--;
+				if(md[vNode[(*imEdge).first].ID] == 0 && mvisited.find((*imEdge).first) == mvisited.end())
+				{
+                    mroots.insert(pair<vector<int>, int>(vNode[(*imEdge).first].vCoor,vNode[(*imEdge).first].ID));
+				}
+			}
+			c++;
+			cout << sn << endl;
+		}
 	}
 	
-
-	
+	cout << "in root" << endl;
+	while(mroots.size())
+	{
+        int u = (*(mroots.rbegin())).second;
+        rimroots = mroots.rbegin();
+        mroots.erase((++rimroots).base());
+		if(mvisited.find(u) != mvisited.end())
+		{
+			continue;
+		}
+		cout << u << endl;
+	    vNode[u].vCoor.push_back(c);
+		c++;
+		for(imEdge = vNode[u].mEdge.begin(); imEdge != vNode[u].mEdge.end(); imEdge++)
+		{
+			md[vNode[(*imEdge).first].ID]--;
+			if(md[vNode[(*imEdge).first].ID] == 0 && mvisited.find((*imEdge).first) == mvisited.end())
+			{
+                mroots.insert(pair<vector<int>, int>(vNode[(*imEdge).first].vCoor,vNode[(*imEdge).first].ID));
+			}
+		}
+	}
 }
 
 void Feline::findFP()
@@ -693,7 +774,7 @@ void Feline::Sample(map<int,int> & mFPNumber)
         level = 0;
         int m1 = (*imR).first.first;
         int m2 = (*imR).first.second;
-		cout << m1 << "\t" << m2 << endl;
+//		cout << m1 << "\t" << m2 << endl;
         bool b = ReachableNoneRecur(m1, m2, level);
         if(level >= 1 && !b) 
         {
