@@ -37,7 +37,7 @@ int main(int argc, char* argv[])
         ftindex << argv[1] << "\t" << duration / CLOCKS_PER_SEC << endl;
         ftindex.close();
     
-		map<int, int> mFPNumber;
+/*		map<int, int> mFPNumber;
 		f.Sample(mFPNumber);
 		f.FPRemoveFromParent(mFPNumber);
 		mFPNumber.clear();
@@ -50,7 +50,7 @@ int main(int argc, char* argv[])
 		f.Sample(mFPNumber);
 		f.FPRemoveFromParent(mFPNumber);
 		mFPNumber.clear();
-		f.Sample(mFPNumber);
+		f.Sample(mFPNumber);*/
 	    f.outputNodes();
 	    f.outputEdges();
 //		f.testReachable();

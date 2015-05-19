@@ -19,9 +19,10 @@ public:
 	void topoLevel();
 	void highDCoor();
 	void highDCoorv2();
+	void newCoor();
 	bool Reachable(int s1, int s2, int &level);
     bool ReachableNoneRecur(int s1, int s2, int &level);
-	void Sample(map<int,int> &mFPNumber);
+	void Sample(map<int,int> &mFPNumber, int &fp);
 	void FPRemoveFromParent(map<int, int> &mFPNumber);
 	
 	void findOptD();
@@ -54,7 +55,7 @@ public:
 	int noRecur;
 	vector<int> dp, dq; //coordinates for neighbor dimensions
 	map<pair<int, int>, int > mRandom;
-
+	map<int, vector<int> > mvCoor;	//Store all the historical coor
 //	map<int, set<int> > mheads;//out-neighbors
 };
 
