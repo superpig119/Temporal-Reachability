@@ -21,11 +21,16 @@ bool vFPCompare(const pair<int,int> &v1, const pair<int,int> &v2)
 void Feline::coorCreate()
 {
 	coorMax = vNode.size();
+
+	cout << "111" << endl;
 	topologicalOrdering();
+	cout << "222" << endl;
 	yCoor();
+	cout << "333" << endl;
 	topoLevel();
 	bool RP = false;
 	int fp;
+	cout << "???" << endl;
 	vector<int> vp(3, 99999999);
 	vector<int>::iterator ivp;
 	int i = 0;
@@ -163,6 +168,7 @@ void Feline::topoLevel()
 		{
             qnode.push((*imd).first);
 			vNode[(*imd).first].level = 0;
+			mvisited[(*imd).first] = true;
 		}
 	}
 
@@ -174,7 +180,11 @@ void Feline::topoLevel()
 		qnode.pop();
 		for(im = vNode[n].mEdge.begin(); im != vNode[n].mEdge.end(); im++)
 		{
-			qnode.push((*im).first);
+			if(mvisited.find((*im).first) == mvisited.end())
+			{
+				qnode.push((*im).first);
+				mvisited[(*im).first] = true;
+			}
 			if(vNode[n].level + 1 > vNode[(*im).first].level)
 			{
 				vNode[(*im).first].level = vNode[n].level + 1;
@@ -766,7 +776,8 @@ void Feline::findOptD()
 void Feline::genTestSet()
 {
 	int i, n1, n2;
-	int ttest = vNode.size() *100;
+	int ttest = vNode.size();
+	mRandom.clear();
 	for(i = 0; i < ttest; i++)
 	{
         n1 = rand() % vNode.size();
@@ -902,7 +913,7 @@ void Feline::Sample(map<int,int> & mFPNumber, int &fp)
 	ifn >> noRecur;
 	ifn.close();
 
-	int ttest = 100 * n;
+	int ttest = n;
     srand((unsigned)time(NULL));
 	map<pair<int, int>, int >::iterator imR;
 	ttest = mRandom.size();

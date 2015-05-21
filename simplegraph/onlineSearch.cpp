@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
 //		f.testGraph(f.vnode);
 //	    f.testSCC();
 //	    f.condense();
-        f.testParent();
+//      f.testParent();
 //		f.testGraph(f.vNode);
 /*		if(f.hasSCC)
 		    f.testGraph(f.vNode);
