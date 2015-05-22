@@ -22,15 +22,11 @@ void Feline::coorCreate()
 {
 	coorMax = vNode.size();
 
-	cout << "111" << endl;
 	topologicalOrdering();
-	cout << "222" << endl;
 	yCoor();
-	cout << "333" << endl;
 	topoLevel();
 	bool RP = false;
 	int fp;
-	cout << "???" << endl;
 	vector<int> vp(3, 99999999);
 	vector<int>::iterator ivp;
 	int i = 0;
@@ -44,13 +40,17 @@ void Feline::coorCreate()
 		noBetter = true;
 		genTestSet();
 		mFPNumber.clear();
+		fp = 0;
 		Sample(mFPNumber, fp);
-		cout << "fp" << fp << endl;
+		cout << "fp number:" << fp << endl;
+		cout << "mFPNumber size:" << mFPNumber.size() << endl;
+		cout << "coordinate dimension:" << (*vNode.begin()).vCoor.size() << endl;
 		if(fp == 0)
 			break;
 		j = 0;
-		while(fp >= lastFP && j < 4)
+/*		while(fp >= lastFP && j < 4)
 		{
+			fp = 0;
 			genTestSet();
 			mFPNumber.clear();
 			Sample(mFPNumber, fp);
@@ -59,16 +59,16 @@ void Feline::coorCreate()
 		lastFP = fp;
 		i++;
 		if(j == 4)
-		{
-			for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
+		{*/
+/*			for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
 			{
 //				(*ivnode).vCoor.erase((*ivnode).vCoor.end() - 1);
 				(*ivnode).vCoor.pop_back();
-			}
+			}*/
 			FPRemoveFromParent(mFPNumber);
-		}
+/*		}
 		else
-			newCoor();
+			newCoor();*/
 /*		for(ivp = vp.begin(); ivp != vp.end(); ivp++)
 		{
 			cout << "1fp:" << fp << "\tivp" << *ivp << endl;
@@ -414,12 +414,12 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
 	}
 	cout << "vFP size:" << vFP.size() << endl;
 	sort(vFP.begin(), vFP.end(), vFPCompare);	//sort,FP num desend
-	for(ivFP = vFP.begin(); ivFP != vFP.end(); ivFP++)
+/*	for(ivFP = vFP.begin(); ivFP != vFP.end(); ivFP++)
 	{
 		cout << "Node number:" << (*ivFP).first << "\tFalse Positive number:" << (*ivFP).second << endl;
-	}
+	}*/
+	cout << "Node number:" << (*(vFP.begin())).first << "\tFalse Positive number:" << (*(vFP.begin())).second << endl;
 	
-//	stack<int> svisited;	//Reverse tree scan,from point to roots
 	queue<int> qvisited;	//Queue for visiting the parents
 	map<int, vector<int> > mvParent;	//level, nodeID
 	map<int, vector<int> >::iterator imvParent;	
@@ -461,13 +461,10 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
 				}
 			}
 		}
-//		while(!svisited.empty())	
 		for(imvParent = mvParent.begin(); imvParent != mvParent.end(); imvParent++)
 		{
 			for(ivv = (*imvParent).second.begin(); ivv != (*imvParent).second.end(); ivv++)
 			{
-//			sn = svisited.top();
-//			svisited.pop();
 				imroots = mroots.find(vNode[*ivv].vCoor);
 				if(imroots != mroots.end())
 				{
@@ -480,12 +477,11 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
 					md[vNode[(*imEdge).first].ID]--;
 					if(md[vNode[(*imEdge).first].ID] == 0 && mvisited.find((*imEdge).first) == mvisited.end())
 					{
-	                 //mroots.insert(pair<vector<int>, int>(vNode[(*imEdge).first].vCoor,vNode[(*imEdge).first].ID));
 	                 mroots.insert(pair<vector<int>, int>(mvCoor[(*imEdge).first], vNode[(*imEdge).first].ID));
 					}
 				}
 				c++;
-				cout << *ivv << endl;
+			//	cout << *ivv << endl;
 			}
 		}
 		mvParent.clear();
@@ -501,7 +497,7 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
 		{
 			continue;
 		}
-		cout << u << endl;
+//		cout << u << endl;
 	    vNode[u].vCoor.push_back(c);
 	    mvCoor[u].push_back(c);
 		c++;
@@ -510,11 +506,11 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
 			md[vNode[(*imEdge).first].ID]--;
 			if(md[vNode[(*imEdge).first].ID] == 0 && mvisited.find((*imEdge).first) == mvisited.end())
 			{
-//                mroots.insert(pair<vector<int>, int>(vNode[(*imEdge).first].vCoor,vNode[(*imEdge).first].ID));
                 mroots.insert(pair<vector<int>, int>(mvCoor[(*imEdge).first], vNode[(*imEdge).first].ID));
 			}
 		}
 	}
+	mFPNumber.clear();
 }
 
 void Feline::findFP()
@@ -912,11 +908,13 @@ void Feline::Sample(map<int,int> & mFPNumber, int &fp)
 	ifstream ifn("Recur");
 	ifn >> noRecur;
 	ifn.close();
-
+	
+	mFPNumber.clear();
 	int ttest = n;
     srand((unsigned)time(NULL));
 	map<pair<int, int>, int >::iterator imR;
 	ttest = mRandom.size();
+	cout << "mRandom size:" << ttest << endl;
 	for(i = 0, imR = mRandom.begin(); i < ttest; i++, imR++)
     {
         level = 0;
