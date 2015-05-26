@@ -40,6 +40,7 @@ public:
     void showEdges();	
 	void outputEdges();	//output edge file
 	void outputNodes();	//output coordiante file
+    void outputCoor();
 	void testD();
 	void testReachable();
 

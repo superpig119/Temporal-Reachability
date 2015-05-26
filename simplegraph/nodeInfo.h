@@ -2,6 +2,8 @@
 #include <map>
 #include "Conf.h"
 #include <sstream>
+#include <string>
+#include <sstream>
 
 using namespace std;
 

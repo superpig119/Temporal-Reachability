@@ -24,6 +24,7 @@ void Feline::coorCreate()
 
 	topologicalOrdering();
 	yCoor();
+    outputCoor();
 	topoLevel();
 	bool RP = false;
 	int fp;
@@ -51,19 +52,19 @@ void Feline::coorCreate()
 		j++;
 		if(j==5)
 			break;
-	cout << "mFPNumber size:" << mFPNumber.size() << endl;
-	vector<pair<int, int> > vFP;	//Store the FP from the map to vector
-	vector<pair<int, int> >::iterator  ivFP;
-	for(imFP = mFPNumber.begin(); imFP != mFPNumber.end(); imFP++)
-	{
-		vFP.push_back(make_pair((*imFP).first, (*imFP).second));
-	}
-	cout << "vFP size:" << vFP.size() << endl;
-	sort(vFP.begin(), vFP.end(), vFPCompare);	//sort,FP num desend
-	for(ivFP = vFP.begin(); ivFP != vFP.end(); ivFP++)
-	{
-		cout << "Node number:" << (*ivFP).first << "\tFalse Positive number:" << (*ivFP).second << endl;
-	}
+	    cout << "mFPNumber size:" << mFPNumber.size() << endl;
+	    vector<pair<int, int> > vFP;	//Store the FP from the map to vector
+	    vector<pair<int, int> >::iterator  ivFP;
+	    for(imFP = mFPNumber.begin(); imFP != mFPNumber.end(); imFP++)
+    	{
+	    	vFP.push_back(make_pair((*imFP).first, (*imFP).second));
+	    }
+	    cout << "vFP size:" << vFP.size() << endl;
+	    sort(vFP.begin(), vFP.end(), vFPCompare);	//sort,FP num desend
+	    for(ivFP = vFP.begin(); ivFP != vFP.end(); ivFP++)
+    	{
+	    	cout << "Node number:" << (*ivFP).first << "\tFalse Positive number:" << (*ivFP).second << endl;
+    	}
 /*		while(fp >= lastFP && j < 4)
 		{
 			fp = 0;
@@ -81,11 +82,12 @@ void Feline::coorCreate()
 //				(*ivnode).vCoor.erase((*ivnode).vCoor.end() - 1);
 				(*ivnode).vCoor.pop_back();
 			}*/
-	//		FPRemoveFromParent(mFPNumber);
+			FPRemoveFromParent(mFPNumber);
 			outputNodes();
 /*		}
 		else*/
-			newCoor();
+	//		newCoor();
+            outputCoor();
 /*		for(ivp = vp.begin(); ivp != vp.end(); ivp++)
 		{
 			cout << "1fp:" << fp << "\tivp" << *ivp << endl;
@@ -433,12 +435,17 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
 	for(ivFP = vFP.begin(); ivFP != vFP.end(); ivFP++)
 	{
 		if(mvisited.find((*ivFP).first) != mvisited.end())
-			continue;
+			continue;   //if already visited, then move on
 		qvisited.push((*ivFP).first);
 		mvisited[(*ivFP).first] = true;
-		vector<int> v;
-		v.push_back((*ivFP).first);
-		mvParent[vNode[(*ivFP).first].level] = v;
+        if(mvParent.find(vNode[(*ivFP).first].level) == mvParent.end())
+        {
+		    vector<int> v;
+		    v.push_back((*ivFP).first);
+    		mvParent[vNode[(*ivFP).first].level] = v;
+        }
+        else
+            mvParent[vNode[(*ivFP).first].level].push_back((*ivFP).first);
 	//	svisited.push((*ivFP).first);
 		while(!qvisited.empty())
 		{
@@ -469,6 +476,7 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
 		{
 			for(ivv = (*imvParent).second.begin(); ivv != (*imvParent).second.end(); ivv++)
 			{
+    //            cout << vNode[*ivv].level << "\t" << *ivv << endl;
 				imroots = mroots.find(vNode[*ivv].vCoor);
 				if(imroots != mroots.end())
 				{
@@ -502,6 +510,7 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
 		{
 			continue;
 		}
+        mvisited[u] = true;
 //		cout << u << endl;
 	    vNode[u].vCoor.push_back(c);
 //	    mvCoor[u].push_back(c);
@@ -698,6 +707,29 @@ void Feline::testNode()
 void Feline::outputNodes()
 {
 	ofstream ofile("coordinate");
+	vector<nodeInfo>::iterator ivnode;
+	vector<int>::iterator ivc;
+	for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
+	{
+		ofile << (*ivnode).ID;
+		for(ivc = (*ivnode).vCoor.begin(); ivc != (*ivnode).vCoor.end(); ivc++)
+		{
+			ofile << "\t" << *ivc;
+		}
+		ofile << endl;
+	}
+	ofile.close();
+}
+
+void Feline::outputCoor()
+{
+    string s;
+    stringstream ss;
+    ss << (*vNode.begin()).vCoor.size();
+    ss >> s;
+    string name = "coor";
+    name += s;
+	ofstream ofile(s);
 	vector<nodeInfo>::iterator ivnode;
 	vector<int>::iterator ivc;
 	for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
@@ -913,6 +945,7 @@ void Feline::Sample(map<int,int> & mFPNumber, int &fp)
     t1 = clock();
     cout << "Sampleing:" << endl;
     
+    noRecur = 0;
 	ifstream ifn("Recur");
 	ifn >> noRecur;
 	ifn.close();
@@ -935,13 +968,12 @@ void Feline::Sample(map<int,int> & mFPNumber, int &fp)
         if(level >= 1 && !b) 
         {
             mis++;
-	//		cout << m1 << "\t" << m2 << endl;
+			cout << m1 << "\t" << m2 << endl;
 			if(mFPNumber.find(m2) == mFPNumber.end())
 				mFPNumber[m2] = 1;
 			else
 				mFPNumber[m2] = mFPNumber[m2] + 1;
         }
-		if(b)
         if(level >= 1)
         {
             online++;
