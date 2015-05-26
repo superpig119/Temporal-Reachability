@@ -34,11 +34,12 @@ void Feline::coorCreate()
 	int lastFP = 99999;
 	bool noBetter = true;
 	map<int, int> mFPNumber;
+	map<int, int>::iterator imFP;
 	vector<nodeInfo>::iterator ivnode;
+		j = 0;
 	while(1)
 	{
 		noBetter = true;
-		genTestSet();
 		mFPNumber.clear();
 		fp = 0;
 		Sample(mFPNumber, fp);
@@ -47,7 +48,22 @@ void Feline::coorCreate()
 		cout << "coordinate dimension:" << (*vNode.begin()).vCoor.size() << endl;
 		if(fp == 0)
 			break;
-		j = 0;
+		j++;
+		if(j==5)
+			break;
+	cout << "mFPNumber size:" << mFPNumber.size() << endl;
+	vector<pair<int, int> > vFP;	//Store the FP from the map to vector
+	vector<pair<int, int> >::iterator  ivFP;
+	for(imFP = mFPNumber.begin(); imFP != mFPNumber.end(); imFP++)
+	{
+		vFP.push_back(make_pair((*imFP).first, (*imFP).second));
+	}
+	cout << "vFP size:" << vFP.size() << endl;
+	sort(vFP.begin(), vFP.end(), vFPCompare);	//sort,FP num desend
+	for(ivFP = vFP.begin(); ivFP != vFP.end(); ivFP++)
+	{
+		cout << "Node number:" << (*ivFP).first << "\tFalse Positive number:" << (*ivFP).second << endl;
+	}
 /*		while(fp >= lastFP && j < 4)
 		{
 			fp = 0;
@@ -65,10 +81,11 @@ void Feline::coorCreate()
 //				(*ivnode).vCoor.erase((*ivnode).vCoor.end() - 1);
 				(*ivnode).vCoor.pop_back();
 			}*/
-			FPRemoveFromParent(mFPNumber);
+	//		FPRemoveFromParent(mFPNumber);
+			outputNodes();
 /*		}
-		else
-			newCoor();*/
+		else*/
+			newCoor();
 /*		for(ivp = vp.begin(); ivp != vp.end(); ivp++)
 		{
 			cout << "1fp:" << fp << "\tivp" << *ivp << endl;
@@ -135,7 +152,7 @@ void Feline::yCoor()
 		iroots = roots.rbegin();
 		roots.erase((*iroots).first);
 		vNode[u].vCoor.push_back(y);
-		mvCoor[u].push_back(y);
+//		mvCoor[u].push_back(y);
 		y++;
 		for(imEdge = vNode[u].mEdge.begin(); imEdge != vNode[u].mEdge.end(); imEdge++)
 		{
@@ -148,12 +165,12 @@ void Feline::yCoor()
 	}
 
 	int j;
-	for(j = 0; j < vNode.size(); j++)
+/*	for(j = 0; j < vNode.size(); j++)
 		dp.push_back(0);
 	for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
 	{
 		dp[(*ivnode).ID] = (*ivnode).vCoor[1];
-	}
+	}*/
 }
 
 void Feline::topoLevel()
@@ -246,19 +263,6 @@ void Feline::DFS(int sNum, vector<bool> &visited, int &time, vector<int> &vd, ve
 	TopoSort[cnt++] = sNum;
 }
 	
-void Feline::highDCoorv2()
-{
-	int r = d - 2;
-	int i;
-
-	for(i = 0; i < r; i++)
-	{
-		map<int, int> md(mdStatic);
-		//map<vector<int, int, vCompare> > mroots;
-	}
-
-}
-	
 void Feline::newCoor()
 {
 	int i, j;
@@ -275,8 +279,8 @@ void Feline::newCoor()
 	{
 		if((*imd).second == 0)
 		{
-           // mroots[vNode[(*imd).first].vCoor] = (*imd).first;
-            mroots[mvCoor[(*imd).first]] = (*imd).first;
+			mroots[vNode[(*imd).first].vCoor] = (*imd).first;
+//            mroots[mvCoor[(*imd).first]] = (*imd).first;
 		}
 	}
 	int c = 1;
@@ -287,15 +291,15 @@ void Feline::newCoor()
         rimroots = mroots.rbegin();
         mroots.erase((++rimroots).base());
         vNode[u].vCoor.push_back(c);
-		mvCoor[u].push_back(c);
+//		mvCoor[u].push_back(c);
 		c++;
 		for(imEdge = vNode[u].mEdge.begin(); imEdge != vNode[u].mEdge.end(); imEdge++)
 		{
 			md[vNode[(*imEdge).first].ID]--;
 			if(md[vNode[(*imEdge).first].ID] == 0)
 			{
-              //  mroots.insert(pair<vector<int>, int>(vNode[(*imEdge).first].vCoor,vNode[(*imEdge).first].ID));
-                mroots.insert(pair<vector<int>, int>(mvCoor[(*imEdge).first],vNode[(*imEdge).first].ID));
+//                mroots.insert(pair<vector<int>, int>(mvCoor[(*imEdge).first],vNode[(*imEdge).first].ID));
+                mroots.insert(pair<vector<int>, int>(vNode[(*imEdge).first].vCoor,(*imEdge).first));
 			}
 		}
 	}
@@ -414,11 +418,11 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
 	}
 	cout << "vFP size:" << vFP.size() << endl;
 	sort(vFP.begin(), vFP.end(), vFPCompare);	//sort,FP num desend
-/*	for(ivFP = vFP.begin(); ivFP != vFP.end(); ivFP++)
+	for(ivFP = vFP.begin(); ivFP != vFP.end(); ivFP++)
 	{
 		cout << "Node number:" << (*ivFP).first << "\tFalse Positive number:" << (*ivFP).second << endl;
-	}*/
-	cout << "Node number:" << (*(vFP.begin())).first << "\tFalse Positive number:" << (*(vFP.begin())).second << endl;
+	}
+//	cout << "Node number:" << (*(vFP.begin())).first << "\tFalse Positive number:" << (*(vFP.begin())).second << endl;
 	
 	queue<int> qvisited;	//Queue for visiting the parents
 	map<int, vector<int> > mvParent;	//level, nodeID
@@ -471,13 +475,14 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
 					mroots.erase(imroots);
 				}
 	            vNode[*ivv].vCoor.push_back(c);
-	            mvCoor[*ivv].push_back(c);
+//	            mvCoor[*ivv].push_back(c);
 				for(imEdge = vNode[*ivv].mEdge.begin(); imEdge != vNode[*ivv].mEdge.end(); imEdge++)
 				{
 					md[vNode[(*imEdge).first].ID]--;
 					if(md[vNode[(*imEdge).first].ID] == 0 && mvisited.find((*imEdge).first) == mvisited.end())
 					{
-	                 mroots.insert(pair<vector<int>, int>(mvCoor[(*imEdge).first], vNode[(*imEdge).first].ID));
+//						mroots.insert(pair<vector<int>, int>(mvCoor[(*imEdge).first], vNode[(*imEdge).first].ID));
+						mroots.insert(pair<vector<int>, int>(vNode[(*imEdge).first].vCoor,vNode[(*imEdge).first].ID));
 					}
 				}
 				c++;
@@ -499,14 +504,15 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
 		}
 //		cout << u << endl;
 	    vNode[u].vCoor.push_back(c);
-	    mvCoor[u].push_back(c);
+//	    mvCoor[u].push_back(c);
 		c++;
 		for(imEdge = vNode[u].mEdge.begin(); imEdge != vNode[u].mEdge.end(); imEdge++)
 		{
 			md[vNode[(*imEdge).first].ID]--;
 			if(md[vNode[(*imEdge).first].ID] == 0 && mvisited.find((*imEdge).first) == mvisited.end())
 			{
-                mroots.insert(pair<vector<int>, int>(mvCoor[(*imEdge).first], vNode[(*imEdge).first].ID));
+//                mroots.insert(pair<vector<int>, int>(mvCoor[(*imEdge).first], vNode[(*imEdge).first].ID));
+                mroots.insert(pair<vector<int>, int>(vNode[(*imEdge).first].vCoor,vNode[(*imEdge).first].ID));
 			}
 		}
 	}
@@ -683,7 +689,9 @@ void Feline::testNode()
 	vector<nodeInfo>::iterator ivnode;
 	for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
 	{
-		cout << "ID:\t" << (*ivnode).ID << "\t" << (*ivnode).vCoor[0] << "\t" << (*ivnode).vCoor[1] << endl;
+//		cout << "ID:\t" << (*ivnode).ID << "\t" << (*ivnode).vCoor[0] << "\t" << (*ivnode).vCoor[1] << endl;
+		cout << "ID:\t" << (*ivnode).ID << endl;
+		cout << "Topo Level:" << (*ivnode).level << endl;
 	}
 }
 
@@ -772,7 +780,7 @@ void Feline::findOptD()
 void Feline::genTestSet()
 {
 	int i, n1, n2;
-	int ttest = vNode.size();
+	int ttest = vNode.size() * 1000;
 	mRandom.clear();
 	for(i = 0; i < ttest; i++)
 	{
@@ -910,9 +918,11 @@ void Feline::Sample(map<int,int> & mFPNumber, int &fp)
 	ifn.close();
 	
 	mFPNumber.clear();
+	cout << "mFPNumber size:" << mFPNumber.size() << endl;
 	int ttest = n;
     srand((unsigned)time(NULL));
 	map<pair<int, int>, int >::iterator imR;
+	genTestSet();
 	ttest = mRandom.size();
 	cout << "mRandom size:" << ttest << endl;
 	for(i = 0, imR = mRandom.begin(); i < ttest; i++, imR++)
@@ -925,12 +935,13 @@ void Feline::Sample(map<int,int> & mFPNumber, int &fp)
         if(level >= 1 && !b) 
         {
             mis++;
-	//		cout << m2 << endl;
-			if(mFPNumber.find(m1) == mFPNumber.end())
+	//		cout << m1 << "\t" << m2 << endl;
+			if(mFPNumber.find(m2) == mFPNumber.end())
 				mFPNumber[m2] = 1;
 			else
 				mFPNumber[m2] = mFPNumber[m2] + 1;
         }
+		if(b)
         if(level >= 1)
         {
             online++;

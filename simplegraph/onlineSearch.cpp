@@ -29,6 +29,7 @@ int main(int argc, char* argv[])
         clock_t t1, t2;
         t1 = clock();
 	    f.coorCreate();
+//		f.testNode();
         t2 = clock();
         double duration = (double)(t2 - t1);
         cout << "Index Construction time:" << duration / CLOCKS_PER_SEC << endl;
