@@ -41,6 +41,8 @@ public:
 	void outputEdges();	//output edge file
 	void outputNodes();	//output coordiante file
     void outputCoor();
+	void outputStat(int d, float mis, float online, double duration);
+
 	void testD();
 	void testReachable();
 

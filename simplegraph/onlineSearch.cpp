@@ -1,4 +1,5 @@
 #include "Feline.h"
+#include <stdlib.h>
 
 int main(int argc, char* argv[])
 {
@@ -12,6 +13,12 @@ int main(int argc, char* argv[])
 	oRecur << 0;
 	oRecur.close();
 //	f.findOptD();
+
+	system("rm ACC");
+	system("rm FPrate");
+	system("rm onR");
+	system("rm FPpercent");
+	system("rm tquery");
 
 	if(f.buildGraph() != -1)
     {
