@@ -1,0 +1,4 @@
+#!/bin/bash
+
+./pre_check ../dataset/p2p_scc.txt -i ../index/p2p_scc 
+

@@ -1,0 +1,3 @@
+#!/bin/bash
+./queryscc -scc 48438 -i ../index/p2p_scc -q query_file/p2p_query.txt 
+
