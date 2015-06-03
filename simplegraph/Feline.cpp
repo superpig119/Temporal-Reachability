@@ -42,6 +42,7 @@ void Feline::coorCreate()
 		if(i++ > 50)
 			break;
 		noBetter = true;
+		cout << "i:" << i << endl;
 		Sample(mFPNumber, fp);
 		cout << "fp number:" << fp << endl;
 		cout << "mFPNumber size:" << mFPNumber.size() << endl;
@@ -51,25 +52,25 @@ void Feline::coorCreate()
 	    vector<pair<int, int> > vFP;	//Store the FP from the map to vector
 	    vector<pair<int, int> >::iterator  ivFP;
 		j = 0;
-		while(fp >= lastFP && j < 5)
+/*		while(fp >= lastFP && j < 5)
 		{
 			fp = 0;
 			genTestSet();
 			mFPNumber.clear();
 			Sample(mFPNumber, fp);
 			j++;
-		}
+		}*/
 		lastFP = fp;
-		if(j == 5)
-		{
+//		if(i > 10)
+//		{
 /*			for(ivnode = vNode.begin(); ivnode != vNode.end(); ivnode++)
 			{
 //				(*ivnode).vCoor.erase((*ivnode).vCoor.end() - 1);
 				(*ivnode).vCoor.pop_back();
 			}*/
-			FPRemoveFromParent(mFPNumber);
-		}
-		else
+//			FPRemoveFromParent(mFPNumber);
+//		}
+//		else
 			newCoor();
 	}
 	cout << "i:" << i << endl;
@@ -111,6 +112,8 @@ void Feline::yCoor()
 		roots.erase((*iroots).first);
 		vNode[u].vCoor.push_back(y);
 		y++;
+		if(y%10000==0)
+			cout << y << endl;
 		for(imEdge = vNode[u].mEdge.begin(); imEdge != vNode[u].mEdge.end(); imEdge++)
 		{
 			md[vNode[(*imEdge).first].ID]--;
@@ -126,8 +129,9 @@ void Feline::yCoor()
 
 void Feline::topoLevel()
 {
+	cout << "Computing Topo Level" << endl;
 	map<int,int> md(mdStatic);
-	map<int,int>::iterator imd;
+	map<int,int>::iterator imd, imEdge;
 	map<int, bool> mvisited;
 	queue<int> qnode;
 	for(imd = md.begin(); imd != md.end(); imd++)
@@ -137,12 +141,46 @@ void Feline::topoLevel()
             qnode.push((*imd).first);
 			vNode[(*imd).first].level = 0;
 			mvisited[(*imd).first] = true;
+			for(imEdge = vNode[(*imd).first].mEdge.begin(); imEdge != vNode[(*imd).first].mEdge.end(); imEdge++)
+			{
+				vNode[(*imEdge).first].p++;
+				if(vNode[(*imEdge).first].p == vNode[(*imEdge).first].vParent.size())
+				{
+					qnode.push((*imEdge).first);
+					mvisited[(*imEdge).first] = true;
+					vNode[(*imEdge).first].level = 1;
+				}
+			}
 		}
 	}
 
 	int n;
 	map<int, int>::iterator im;
+	vector<int>::iterator ivp;
 	while(!qnode.empty())
+	{
+		n = qnode.front();
+		qnode.pop();
+		for(im = vNode[n].mEdge.begin(); im != vNode[n].mEdge.end(); im++)
+		{
+			vNode[(*im).first].p++;
+			if(vNode[(*im).first].p == vNode[(*im).first].vParent.size())
+			{
+				qnode.push((*im).first);
+				int max=0;
+				for(ivp = vNode[(*im).first].vParent.begin(); ivp != vNode[(*im).first].vParent.end(); ivp++)
+				{
+					if(vNode[*ivp].level > max)
+						max = vNode[*ivp].level;
+				}
+				vNode[(*im).first].level = max + 1;
+			}
+		}
+	}
+
+
+	
+/*	while(!qnode.empty())
 	{
 		n = qnode.front();
 		qnode.pop();
@@ -159,7 +197,7 @@ void Feline::topoLevel()
 				qnode.push((*im).first);
 			}
 		}
-	}
+	}*/
 }
 
 void Feline::topologicalOrdering()
@@ -239,12 +277,17 @@ void Feline::newCoor()
 	
 	while(mroots.size())
 	{
-        int u = (*(mroots.rbegin())).second;
-        rimroots = mroots.rbegin();
-        mroots.erase((++rimroots).base());
+//        int u = (*(mroots.rbegin())).second;
+//        rimroots = mroots.rbegin();
+ //       mroots.erase((++rimroots).base());
+		imroots = mroots.begin();
+		int u = (*imroots).second;
+		mroots.erase(imroots);
         vNode[u].vCoor.push_back(c);
 //		mvCoor[u].push_back(c);
 		c++;
+		if(c%10000==0)
+			cout << c << endl;
 		for(imEdge = vNode[u].mEdge.begin(); imEdge != vNode[u].mEdge.end(); imEdge++)
 		{
 			md[vNode[(*imEdge).first].ID]--;
@@ -436,6 +479,8 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
 					}
 				}
 				c++;
+				if(c%10000==0)
+					cout << c << endl;
 			}
 		}
 		mvParent.clear();
@@ -454,6 +499,8 @@ void Feline::FPRemoveFromParent(map<int, int> &mFPNumber)
         mvisited[u] = true;
 	    vNode[u].vCoor.push_back(c);
 		c++;
+		if(c%10000==0)
+			cout << c << endl;
 		for(imEdge = vNode[u].mEdge.begin(); imEdge != vNode[u].mEdge.end(); imEdge++)
 		{
 			md[vNode[(*imEdge).first].ID]--;
@@ -591,7 +638,10 @@ bool Feline::Reachable(int s1, int s2, int &level)
 
 bool Feline::ReachableNoneRecur(int s1, int s2, int &level)
 {
-    if(noRecur == 0)
+	if(vNode[s1].noOut)
+		return false;
+    
+	if(noRecur == 0)
     {
         if(vNode[s1] < vNode[s2])
         {
@@ -748,7 +798,7 @@ void Feline::findOptD()
 void Feline::genTestSet()
 {
 	int i, n1, n2;
-	int ttest = vNode.size() * 10;
+	int ttest = vNode.size()/10;
 	mRandom.clear();
 	for(i = 0; i < ttest; i++)
 	{

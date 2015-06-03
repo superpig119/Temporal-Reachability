@@ -59,7 +59,6 @@ public:
 	vector<int> dp, dq; //coordinates for neighbor dimensions
 	map<pair<int, int>, int > mRandom;
 	map<int, vector<int> > mvCoor;	//Store all the historical coor
-//	map<int, set<int> > mheads;//out-neighbors
 };
 
 bool operator <(nodeInfo &n1, nodeInfo &n2);
@@ -69,9 +68,9 @@ bool vFPCompare(const pair<int,int> &v1, const pair<int,int> &v2);
 class vCompare
 {
 public:
-	bool operator()(const vector<int> &v1, const vector<int> &v2) const
-	{
-		vector<int>::const_iterator  iv1, iv2;
+	bool operator()(const vector<int> &v1, const vector<int> &v2) const	//false:v2,v2	true:v1,v2
+	{	
+		vector<int>::const_iterator  iv1, iv2;	
 		int t1 = 0;
 		int	t2 = 0;
 		bool f = true;
@@ -88,11 +87,11 @@ public:
 				f = false;	//v1 is not smaller than v2
 		}
 
-		if(f)	//phase1:v1 is smaller than v2, next d should be bigger
-			return true;
+		if(f)	//phase1:v1 is smaller than v2, then v2 smaller than v1 in tree to be earlier retrieved
+			return false;
 		else	//when ki is not comparable
 		{
-			if(t1 < t2)	//phase2:compare sum
+			if(t1 > t2)	//phase2:compare sum
 				return true;
 			else if(t1 == t2)	//phase3:compare deviation
 			{
@@ -104,37 +103,35 @@ public:
 				for(iv1 = v1.begin(); iv1 != v1.end(); iv1++)
 				{
 					d1 += pow(*iv1 - m1, 2);
-//					cout << *iv1 << "\t";
 				}
-//				cout << endl;
+
 				for(iv2 = v2.begin(); iv2 != v2.end(); iv2++)
 				{
 					d2 += pow(*iv2 - m2, 2);
-//					cout << *iv2 << "\t";
 				}
-//				cout << endl;
-//				cout << "t1:" << t1 << "\tt2:" << t2 << endl;
-//				cout << "d1:" << d1 << "\td2:" << d2 << endl;
-//				cout << "min1:" << min1 << "\tmin2:" << min2 << endl;
 				
-				if(d1 < d2)
+				if(d1 > d2)
 				{
-					return false;
+					return true;
 				}
 				else if(d1 == d2)
 				{
-					if(min1 < min2)
+					if(min1 > min2)
 						return true;
-					else if(v1[v1.size() - 1] < v2[v2.size() - 1])
-						return true;
-					else
+					else if(min1 == min2)
+					{
+						if(v1[v1.size() - 1] > v2[v2.size() - 1])
+							return true;
+						else
+							return false;
+					}
+					else//min1 < min2
 						return false;
 				}
-				else	//d1 > d2
-					return true;
-		
+				else	//d1 < d2
+					return false;
 			}
-			else	//t1>t2
+			else	//t1<t2
 				return false;
 		}
 	}

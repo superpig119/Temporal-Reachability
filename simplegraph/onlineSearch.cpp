@@ -44,13 +44,6 @@ int main(int argc, char* argv[])
         ofstream ftindex("tindex", ofstream::app);
         ftindex << argv[1] << "\t" << duration / CLOCKS_PER_SEC << endl;
         ftindex.close();
-        int level;
-        int a1 = 25;
-        int a2 =5;
-        if(f.Reachable(a1,a2, level))
-            cout << a1 << " can reach " << a2 << endl;
-        else
-            cout << a1 << " cannot reach " << a2 << endl;
 /*		map<int, int> mFPNumber;
 		f.Sample(mFPNumber);
 		f.FPRemoveFromParent(mFPNumber);

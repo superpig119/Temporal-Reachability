@@ -14,9 +14,11 @@ typedef struct NODEINFO
 	int ID;			//node's orginal ID
 	map<int, int> mEdge;    //neighbor ID,1
 	vector<int> vParent;
+	int p;	//the number of parents that have topo level;
 	vector<int> vCoor;
 	vector<int> vUnreachable;
 	vector<int> vMaxCoor;	//Max coordinate to reach
 	int level;	//the topological level
+	bool noOut;
 }nodeInfo;
 #endif

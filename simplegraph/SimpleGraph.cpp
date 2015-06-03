@@ -22,11 +22,18 @@ int SimpleGraph::buildGraph()
 		nodeInfo ni;
 		ni.ID = sNode;
 		ni.level = -1;
+
+		if(edgeNum == 0)
+			ni.noOut = true;
+		else
+			ni.noOut = false;
+		
 		for(j = 0; j < edgeNum; j++)
 		{
 			infile >> dNode;
 			ni.mEdge[dNode] = 1;
 		}
+		ni.p = 0;
 		vNode.push_back(ni);
 	}
 
