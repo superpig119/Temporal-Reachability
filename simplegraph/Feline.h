@@ -65,6 +65,8 @@ bool operator <(nodeInfo &n1, nodeInfo &n2);
 bool coorCompare(nodeInfo n1, nodeInfo n2);
 bool vFPCompare(const pair<int,int> &v1, const pair<int,int> &v2);
 
+int abs(int n);
+
 class vCompare
 {
 public:
@@ -95,11 +97,11 @@ public:
 				return true;
 			else if(t1 == t2)	//phase3:compare deviation
 			{
-				float m1, m2;
+				long long m1, m2;
 				m1 = t1 / v1.size();
 				m2 = t2 / v2.size();
-				float d1 = 0;
-				float d2 = 0;
+				long long d1 = 0;
+				long long d2 = 0;
 				for(iv1 = v1.begin(); iv1 != v1.end(); iv1++)
 				{
 					d1 += pow(*iv1 - m1, 2);

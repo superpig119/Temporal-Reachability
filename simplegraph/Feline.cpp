@@ -18,6 +18,14 @@ bool vFPCompare(const pair<int,int> &v1, const pair<int,int> &v2)
 		return false;
 }
 
+int abs(int n)
+{
+	if(n >=0)
+		return n;
+	else
+		return -n;
+}
+
 void Feline::coorCreate()
 {
 	coorMax = vNode.size();
@@ -68,10 +76,10 @@ void Feline::coorCreate()
 //				(*ivnode).vCoor.erase((*ivnode).vCoor.end() - 1);
 				(*ivnode).vCoor.pop_back();
 			}*/
-//			FPRemoveFromParent(mFPNumber);
+			FPRemoveFromParent(mFPNumber);
 //		}
 //		else
-			newCoor();
+//			newCoor();
 	}
 	cout << "i:" << i << endl;
 }
@@ -103,6 +111,7 @@ void Feline::yCoor()
 		if((*imd).second == 0)
 			roots[vNode[(*imd).first].vCoor[0]] = vNode[(*imd).first].ID;
 	}
+	cout << "mroots size:" << roots.size() << endl;
 
 	int y = 1;
 	while(roots.size())
@@ -269,12 +278,56 @@ void Feline::newCoor()
 	{
 		if((*imd).second == 0)
 		{
+			if(mroots.find(vNode[(*imd).first].vCoor) != mroots.end())
+			{
+				cout << "Conflict!" << endl;
+				imroots = mroots.find(vNode[(*imd).first].vCoor);
+				float m1 = 0;
+				float m2 = 0;
+				long long d1 = 0;
+				long long d2 = 0;
+				for(icvi = (*imroots).first.begin(); icvi != (*imroots).first.end(); icvi++)
+				{
+					m1 += *icvi;
+					cout << *icvi << "\t";
+				}
+				for(icvi = (*imroots).first.begin(); icvi != (*imroots).first.end(); icvi++)
+				{
+					d1 += pow(*icvi-m1,2);
+				}
+				cout << "sum:" << m1<< endl;
+				m1 = m1 / (*imroots).first.size();
+				cout << "d:" << d1;
+				cout << endl;
+
+				for(ivi = vNode[(*imd).first].vCoor.begin(); ivi != vNode[(*imd).first].vCoor.end(); ivi++)
+				{
+					m2 += *ivi;
+					cout << *ivi << "\t";
+				}
+				for(ivi = vNode[(*imd).first].vCoor.begin(); ivi != vNode[(*imd).first].vCoor.end(); ivi++)
+				{
+					d2 += pow(*ivi-m2,2);
+				}
+				cout << "sum:" << m2<< endl;
+				m2 = m2 / (*imroots).first.size();
+				cout << "d:" << d2;
+				cout << endl;
+			}
 			mroots[vNode[(*imd).first].vCoor] = (*imd).first;
+
 //            mroots[mvCoor[(*imd).first]] = (*imd).first;
 		}
 	}
 	int c = 1;
 	
+	imroots = mroots.begin();
+	cout << "mroots size:" << mroots.size() << endl;
+	bool f = false;
+	cout << "vcsize:" << (*imroots).first.size() << endl;
+	if((*imroots).first.size() == 7)
+		f = true;
+
 	while(mroots.size())
 	{
 //        int u = (*(mroots.rbegin())).second;
@@ -798,7 +851,7 @@ void Feline::findOptD()
 void Feline::genTestSet()
 {
 	int i, n1, n2;
-	int ttest = vNode.size()/10;
+	int ttest = vNode.size();
 	mRandom.clear();
 	for(i = 0; i < ttest; i++)
 	{
