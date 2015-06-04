@@ -76,10 +76,10 @@ void Feline::coorCreate()
 //				(*ivnode).vCoor.erase((*ivnode).vCoor.end() - 1);
 				(*ivnode).vCoor.pop_back();
 			}*/
-			FPRemoveFromParent(mFPNumber);
+//			FPRemoveFromParent(mFPNumber);
 //		}
 //		else
-//			newCoor();
+			newCoor();
 	}
 	cout << "i:" << i << endl;
 }
