@@ -186,7 +186,7 @@ public:
 private:
 		void HugeNodeListUnion(vector<int>& v1, const vector<int>& v2);
 public:
-		bool ProLabelQueryDFS2(const int u, const int v);
+		bool ProLabelQueryDFS2(const int u, const int v, int &level);
 		void IndexQueryTest(const string& indexfilename, const string& queryfilename);
 		bool IsContradict(vector<int>& v1, vector<int>& v2);
 		bool IPtest(const int u, const int v);

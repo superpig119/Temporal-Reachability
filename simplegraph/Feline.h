@@ -13,6 +13,7 @@ class Feline : public SimpleGraph
 public:
 	void coorCreate();
 	void topologicalOrdering();
+	void xCoor();
 	void yCoor();
 	void DFSTravel(int &cnt, vector<int> &TopoSort);
 	void DFS(int sNum, vector<bool> &visited, int &time, vector<int> &vd, vector<int> &vf, vector<int> &vParent, int &cnt, vector<int> &TopoSort);
@@ -21,7 +22,7 @@ public:
 	void highDCoorv2();
 	void newCoor();
 	bool Reachable(int s1, int s2, int &level);
-    bool ReachableNoneRecur(int s1, int s2, int &level);
+    bool ReachableNoneRecur(int s1, int s2, int &level, vector<unsigned> &visited, unsigned &queryid);
 	void Sample(map<int,int> &mFPNumber, int &fp);
 	void FPRemoveFromParent(map<int, int> &mFPNumber);
 	

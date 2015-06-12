@@ -1,5 +1,7 @@
-../data/simpleGraph/real/datacit-Patents.txt
+../data/simpleGraph/real/cit-Patent/dataconcit
 50
 2
 ../data/simpleGraph/smallworld/10000/10/0.7/datawssmall
 ../data/simpleGraph/databi
+../data/simpleGraph/real/twitter/datatwitter
+../data/simpleGraph/real/citeseer/dataconciteseer

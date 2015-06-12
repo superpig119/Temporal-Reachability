@@ -1,5 +1,5 @@
 CC      = g++
-CPPFLAGS= -Wno-deprecated -O3 -c -m64 -std=c++0x
+CPPFLAGS= -Wno-deprecated -O3 -c -m64 -std=c++0x -g
 LDFLAGS = -O3
 SOURCES = main.cpp Util.cpp Graph.cpp
 OBJECTS = $(SOURCES:.cpp=.o)

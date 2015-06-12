@@ -151,7 +151,7 @@ int main(int argc, char **argv) {
 	int m,n,p,q,i2,j2,size1,size2;
 	int *intArray1, *intArray2;
 	for (int i = 0; i < queryNum; i++) {
-
+	//	cout << i << endl;
 		//	query(s, t);
 		p=s[i];
 		q=t[i];

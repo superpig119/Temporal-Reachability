@@ -22,6 +22,8 @@ int SimpleGraph::buildGraph()
 		nodeInfo ni;
 		ni.ID = sNode;
 		ni.level = -1;
+		ni.coorSum = 0;
+		ni.coorMax = 0;
 
 		if(edgeNum == 0)
 			ni.noOut = true;
@@ -32,6 +34,7 @@ int SimpleGraph::buildGraph()
 		{
 			infile >> dNode;
 			ni.mEdge[dNode] = 1;
+			ni.vEdge.push_back(dNode);
 		}
 		ni.p = 0;
 		vNode.push_back(ni);

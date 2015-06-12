@@ -1521,7 +1521,7 @@ void Graph::IndexQueryTest(const string& indexfilename, const string& queryfilen
 	cout << "Total Query number: " << src.size() << endl;
 	
 	querycnt=0;
-	gettimeofday(&querystart, NULL);
+/*	gettimeofday(&querystart, NULL);
 //	for(vector< pair<int, int> >::iterator qit=qpair.begin(); qit!=qpair.end(); qit++){
 	for(vector<int>::iterator uit=src.begin(), vit=dest.begin(); uit!=src.end(); uit++, vit++){
 //	for(i=0; i<src.size(); i++){
@@ -1531,14 +1531,16 @@ void Graph::IndexQueryTest(const string& indexfilename, const string& queryfilen
 
 		if(*uit==*vit)
 			ProLflag=true;
-		else if(reachindex[*uit].layerdown>=reachindex[*vit].layerdown || reachindex[*uit].layerup<=reachindex[*vit].layerup)
-			ProLflag=false;
+//		else if(reachindex[*uit].layerdown>=reachindex[*vit].layerdown || reachindex[*uit].layerup<=reachindex[*vit].layerup)
+//			ProLflag=false;
 		else{
 			querycnt++;
-			ProLabelQueryDFS2(*uit, *vit);
+			int level = 0;
+			ProLabelQueryDFS2(*uit, *vit, level);
 		}
+	if(querycnt++ %10000 ==0)
+		cout << querycnt << endl;
 
-/*
                 if((*qit).first==(*qit).second)
                         ProLflag=true;
 		else if(reachindex[(*qit).first].layerdown>=reachindex[(*qit).second].layerdown || reachindex[(*qit).first].layerup<=reachindex[(*qit).second].layerup)
@@ -1550,26 +1552,37 @@ void Graph::IndexQueryTest(const string& indexfilename, const string& queryfilen
 */
 //		cout << ProLflag << endl;
 //
-	}
+/*	}
 	gettimeofday(&queryend, NULL);
-        cout << "Time Cost: " << (queryend.tv_sec - querystart.tv_sec)*1000.0 + (queryend.tv_usec - querystart.tv_usec)*1.0/1000.0 << endl;
+        cout << "Time Cost: " << (queryend.tv_sec - querystart.tv_sec)*1000.0 + (queryend.tv_usec - querystart.tv_usec)*1.0/1000.0 << endl;*/
 
 	int count=0;
 	i=0;
 	querycnt=0;
 	memset(flag, 0, sizeof(int)*vsize);
+	float fp = 0;
 //	for(vector< pair<int, int> >::iterator qit=qpair.begin(); qit!=qpair.end(); qit++, i++){
-	for(vector<int>::iterator uit=src.begin(), vit=dest.begin(); uit!=src.end(); uit++, vit++, i++){
-
-                if(*uit==*vit)
-                        ProLflag=true;
-                else if(reachindex[*uit].layerdown>=reachindex[*vit].layerdown || reachindex[*uit].layerup<=reachindex[*vit].layerup)
-                        ProLflag=false;
+	clock_t t1, t2;
+	t1 = clock();
+	gettimeofday(&querystart, NULL);
+	float online = 0;
+	for(vector<int>::iterator uit=src.begin(), vit=dest.begin(); uit!=src.end(); uit++, vit++, i++)
+	{
+        if(*uit==*vit)
+            ProLflag=true;
+  //    else if(reachindex[*uit].layerdown>=reachindex[*vit].layerdown || reachindex[*uit].layerup<=reachindex[*vit].layerup)
+    //                    ProLflag=false;
 		else{
 			querycnt++;
-			ProLflag=ProLabelQueryDFS2(*uit, *vit);
+			int level = 0;
+			ProLflag=ProLabelQueryDFS2(*uit, *vit, level);
+			if(!ProLflag && level > 1)
+				fp++;
+			if(level > 1)
+				online++;
 		}
-
+		if(querycnt %10000 ==0)
+			cout << querycnt << endl;
 /*
                 if((*qit).first==(*qit).second)
                         ProLflag=true;
@@ -1580,14 +1593,29 @@ void Graph::IndexQueryTest(const string& indexfilename, const string& queryfilen
                         ProLflag=ProLabelQueryDFS2((*qit).first, (*qit).second);
                 }
 */
-		if((bool)reachflag[i]!=ProLflag){
+/*		if((bool)reachflag[i]!=ProLflag)
+		{
 //			cout << "i: " << i << '\t' << (*qit).first << ' ' << (*qit).second << ' ' << reachflag[i] << endl;
 			cout << "i: " << i << '\t' << *uit << ' ' << *vit << ' ' << reachflag[i] << endl;
 			count++;
-		}
+		}*/
 	}
+	gettimeofday(&queryend, NULL);
+	t2 = clock();
+	double duration = (double)(t2 - t1);
+	cout << "Average query time:" << duration / src.size() / CLOCKS_PER_SEC << endl;
+    cout << "query time: " << ((queryend.tv_sec - querystart.tv_sec)*1000.0 + (queryend.tv_usec - querystart.tv_usec)*1.0/1000.0) / src.size() << endl;
 
-	cout << "False number: " << count << endl;
+//	cout << "False number: " << count << endl;
+	cout << "FP number:" << fp << endl;
+	float fprate = fp / online;
+	float fppercent = fp / src.size();
+	float onR = online / src.size();
+	cout << "FP rate:" << fprate << endl;
+	cout << "FPpercent:" << fppercent << endl;
+	cout << "online Rate:" << onR << endl;
+	cout << "ACC:" << 1 - fppercent << endl;
+
 
 	delete[] flag;
 }
@@ -1626,16 +1654,17 @@ bool Graph::IPtest(const int u, const int v){
 	return false;
 }
 
-bool Graph::ProLabelQueryDFS2(const int u, const int v){
+bool Graph::ProLabelQueryDFS2(const int u, const int v, int &level){
 //      int tmpu;
 
+	level++;
 //      cout << u << '\t';
         flag[u]=querycnt;
 
         if(IPtest(u,v))
                 return false;
 
-        unsigned int edgelistsize=graph[u].outList.size();
+/*        unsigned int edgelistsize=graph[u].outList.size();
 
         if(edgelistsize > hugenode && HUGENODENUM!=0){
 
@@ -1650,18 +1679,18 @@ bool Graph::ProLabelQueryDFS2(const int u, const int v){
 		if(edgelistsize > graph[ reachindex[v].Label[ reachindex[v].HLimit-1 ] ].outList.size())
 			return false;
 	}
-
+*/
 //      for(unsigned int i=0; i<edgelistsize; i++){
-        for(vector<int>::iterator it=graph[u].outList.begin(); it!=graph[u].outList.end(); it++){
+	       for(vector<int>::iterator it=graph[u].outList.begin(); it!=graph[u].outList.end(); it++){
 //              tmpu=graph[u].outList[i];
                 if(*it==v)
                         return true;
 //              if(reachindex[tmpu].layerup > reachindex[v].layerup && reachindex[tmpu].layerdown < reachindex[v].layerdown && flag[tmpu]!=querycnt){
 //              if(flag[*it]!=querycnt){
-		if(reachindex[*it].layerup > reachindex[v].layerup && reachindex[*it].layerdown < reachindex[v].layerdown && flag[*it]!=querycnt){
-			if(ProLabelQueryDFS2(*it, v))
+//		if(reachindex[*it].layerup > reachindex[v].layerup && reachindex[*it].layerdown < reachindex[v].layerdown && flag[*it]!=querycnt){
+			if(ProLabelQueryDFS2(*it, v, level))
 				return true;
-                }
+               // }
         }
 
         return false;
